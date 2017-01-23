@@ -9,4 +9,5 @@ import java.util.Set;
 public class Instructor extends Person
 {
     private Set<Student> students;
+    private LessonCost lessonCost;
 }
