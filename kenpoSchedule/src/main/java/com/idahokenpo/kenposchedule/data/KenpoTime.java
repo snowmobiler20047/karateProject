@@ -16,6 +16,17 @@ public class KenpoTime implements Comparable<KenpoTime>
         this.minute = minute;
         this.isMorning = isMorning;
     }
+    
+    @Override
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(hour.getDisplayValue()).append(":");
+        sb.append(minute.getDisplayValue());
+        sb.append(isMorning ? "AM" : "PM");
+        
+        return sb.toString();
+    }
 
     @Override
     public int compareTo(KenpoTime o)

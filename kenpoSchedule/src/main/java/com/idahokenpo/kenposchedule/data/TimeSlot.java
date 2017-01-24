@@ -7,9 +7,21 @@ import lombok.Data;
  * @author Korey
  */
 @Data
-public class TimeSlot
+public class TimeSlot implements Comparable<TimeSlot>
 {
-    private KenpoTime startTime;
-    private KenpoTime endTime;
-    private Lesson lessons;
+    private final KenpoTime startTime;
+    private final KenpoTime endTime;
+    private Lesson lesson;
+
+    public TimeSlot(KenpoTime startTime, KenpoTime endTime)
+    {
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+    
+    @Override
+    public int compareTo(TimeSlot o)
+    {
+        return this.getStartTime().compareTo(o.getStartTime());
+    }
 }

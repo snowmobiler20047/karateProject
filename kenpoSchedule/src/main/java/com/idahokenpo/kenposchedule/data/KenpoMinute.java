@@ -11,8 +11,20 @@ package com.idahokenpo.kenposchedule.data;
  */
 public enum KenpoMinute
 {
-    ZERO,
-    FIFTEEN,
-    THIRTY,
-    FORTY_FIVE
+    ZERO("00"),
+    FIFTEEN("15"),
+    THIRTY("30"),
+    FORTY_FIVE("45");
+    
+    private String minuteNum;
+
+    private KenpoMinute(String minuteNum)
+    {
+        this.minuteNum = minuteNum;
+    }
+    
+    public String getDisplayValue()
+    {
+        return minuteNum;
+    }
 }
