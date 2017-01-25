@@ -5,6 +5,8 @@
  */
 package com.idahokenpo.kenposchedule;
 
+import com.idahokenpo.kenposchedule.dao.DataLoader;
+import com.idahokenpo.kenposchedule.data.BeltRank;
 import com.idahokenpo.kenposchedule.data.Instructor;
 import com.idahokenpo.kenposchedule.data.KenpoHour;
 import com.idahokenpo.kenposchedule.data.KenpoMinute;
@@ -19,6 +21,7 @@ import com.idahokenpo.kenposchedule.data.TimeSlot;
 import java.time.DayOfWeek;
 import java.util.Map;
 import java.util.NavigableSet;
+import org.bson.Document;
 
 /**
  *
@@ -28,7 +31,13 @@ public class Test
 {
     public static void main(String[] args)
     {
+       //doTest();
+        doDatabaseTest();
         
+    }
+    
+    private static void doTest()
+    {
         Schedule schedule = new Schedule();
         KenpoTime startTime = new KenpoTime(KenpoHour.FIVE, KenpoMinute.FORTY_FIVE, false);
         KenpoTime endTime = new KenpoTime(KenpoHour.SIX, KenpoMinute.THIRTY, false);
@@ -79,8 +88,24 @@ public class Test
                         + timeSlot1.getLesson().calculateCost());   
             }
         }
+    }
+    private static void doDatabaseTest()
+    {
+        DataLoader loader = new DataLoader();
+        loader.createDatabase();
+        Student student = new Student();
+        student.setFirstName("firstnameOther");
+        student.setLastName("lastnameOther");
+        student.setRank(BeltRank.BLUE);
         
+        loader.getStudent("58881f094b6fb33573e2f683");
+        //TODO get the updates figured out
+        //loader.updateStudent(student);
         
-        
+        //loader.insertStudent(student);
+        for (Document document : loader.getStudents().find())
+        {
+            System.out.println(document);
+        }
     }
 }
