@@ -6,6 +6,7 @@
 package com.idahokenpo.kenposchedule;
 
 import com.idahokenpo.kenposchedule.dao.DataLoader;
+import com.idahokenpo.kenposchedule.dao.StudentDao;
 import com.idahokenpo.kenposchedule.data.BeltRank;
 import com.idahokenpo.kenposchedule.data.Instructor;
 import com.idahokenpo.kenposchedule.data.KenpoHour;
@@ -32,8 +33,8 @@ public class Test
 {
     public static void main(String[] args)
     {
-       //doTest();
-        doDatabaseTest();
+       doTest();
+//        doDatabaseTest();
         
     }
     
@@ -57,12 +58,13 @@ public class Test
         instructor.setSchedule(schedule);
         
         Lesson lesson = new Lesson();
-        lesson.setInstructor(instructor);
+//        lesson.setInstructor(instructor);
         lesson.setLessonType(LessonType.GROUP);
+        lesson.addStudent(new Student());
         lesson.setStatus(LessonStatus.READY);
         
         Lesson lesson2 = new Lesson();
-        lesson2.setInstructor(instructor);
+//        lesson2.setInstructor(instructor);
         lesson2.setLessonType(LessonType.PRIVATE);
         lesson2.setStatus(LessonStatus.READY);
         lesson2.getStudents().add(new Student());
@@ -80,26 +82,27 @@ public class Test
                         + " - "
                         + timeSlot1.getEndTime().toString()
                         + " "
-                        + timeSlot1.getLesson().getInstructor().getNickname()
+                        + instructor.getNickname()
                         + " "
                         + timeSlot1.getLesson().getLessonType() 
                         + " " 
                         + timeSlot1.getLesson().getStatus()
                         + " Cost:$"
-                        + timeSlot1.getLesson().calculateCost());   
+                        + timeSlot1.getLesson().calculateCost(instructor));   
             }
         }
     }
     private static void doDatabaseTest()
     {
-        DataLoader loader = new DataLoader();
-        loader.createDatabase();
+//        DataLoader loader = new DataLoader();
+//        loader.createDatabase();
+        StudentDao loader = new StudentDao();
         //loader.deleteStudents();
         Student student = new Student();
         student.setFirstName("firstname");
         student.setLastName("lastname");
         student.setRank(BeltRank.GREEN);
-        loader.insertStudent(student);
+        //loader.insertStudent(student);
         
         //List<Student> students = loader.getStudents();
         

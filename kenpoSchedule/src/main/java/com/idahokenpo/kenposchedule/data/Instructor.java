@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class Instructor extends Person
 {
-    private Set<Student> students;
+    private Set<Student> students; // why is this here?
     private LessonCost lessonCost;
     private Schedule schedule;
 }
