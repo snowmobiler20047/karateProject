@@ -16,10 +16,8 @@ import org.bson.Document;
  */
 public class StudentDao
 {
-
-    private static final String COLLECTION_NAME = "students";
     private final MongoDatabase database = DatabaseUtils.getDatabase();
-    private final MongoCollection collection = database.getCollection(COLLECTION_NAME);
+    private final MongoCollection collection = database.getCollection(CollectionNamesHelper.STUDENTS.getCollectionName());
     private final Gson gson = new Gson();
 
     public List<Student> getStudents()
@@ -37,7 +35,7 @@ public class StudentDao
 
     public Student getStudent(String studentId)
     {
-        Document doc = (Document) collection.find(eq("personId", studentId)).first();
+        Document doc = (Document) collection.find(eq(CollectionNamesHelper.STUDENTS.getKeyId(), studentId)).first();
         if (doc == null)
         {
             throw new IllegalArgumentException("Student ID: " + studentId + " doesn't exist");
@@ -56,7 +54,7 @@ public class StudentDao
         String json = gson.toJson(student);
 //        System.out.println(json);
 
-        collection.replaceOne(eq("personId", student.getPersonId()), Document.parse(json));
+        collection.replaceOne(eq(CollectionNamesHelper.STUDENTS.getKeyId(), student.getPersonId()), Document.parse(json));
     }
 
     /**
@@ -70,6 +68,6 @@ public class StudentDao
 
     public void deleteStudent(Student student)
     {
-        collection.deleteOne(eq("personId", student.getPersonId()));
+        collection.deleteOne(eq(CollectionNamesHelper.STUDENTS.getKeyId(), student.getPersonId()));
     }
 }
