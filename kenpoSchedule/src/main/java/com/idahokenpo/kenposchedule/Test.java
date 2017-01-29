@@ -19,6 +19,7 @@ import com.idahokenpo.kenposchedule.data.Schedule;
 import com.idahokenpo.kenposchedule.data.Student;
 import com.idahokenpo.kenposchedule.data.TimeSlot;
 import java.time.DayOfWeek;
+import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
 import org.bson.Document;
@@ -93,19 +94,26 @@ public class Test
     {
         DataLoader loader = new DataLoader();
         loader.createDatabase();
+        //loader.deleteStudents();
         Student student = new Student();
-        student.setFirstName("firstnameOther");
-        student.setLastName("lastnameOther");
-        student.setRank(BeltRank.BLUE);
+        student.setFirstName("firstname");
+        student.setLastName("lastname");
+        student.setRank(BeltRank.GREEN);
+        loader.insertStudent(student);
         
-        loader.getStudent("58881f094b6fb33573e2f683");
-        //TODO get the updates figured out
-        //loader.updateStudent(student);
+        //List<Student> students = loader.getStudents();
         
-        //loader.insertStudent(student);
-        for (Document document : loader.getStudents().find())
+//        Student student2 = loader.getStudent(students.get(0).getPersonId());
+//        student2.setRank(BeltRank.BLUE);
+//        student2.setFirstName("changedFirst");
+//        student2.setLastName("changedLastname");
+      
+//        System.out.println("Update " + student2);
+//        loader.updateStudent(student2);
+        
+        for (Student s : loader.getStudents())
         {
-            System.out.println(document);
+            System.out.println(s);
         }
     }
 }

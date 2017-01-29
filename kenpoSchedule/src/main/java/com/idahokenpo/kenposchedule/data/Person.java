@@ -1,6 +1,7 @@
 package com.idahokenpo.kenposchedule.data;
 
 import lombok.Data;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -9,7 +10,7 @@ import lombok.Data;
 @Data
 public abstract class Person
 {
-   private int id;
+   protected String personId;
    private String prefix;
    private String firstName;
    private String middleName;

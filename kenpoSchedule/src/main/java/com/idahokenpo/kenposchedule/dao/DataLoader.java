@@ -1,13 +1,15 @@
 package com.idahokenpo.kenposchedule.dao;
 
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.idahokenpo.kenposchedule.data.Student;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Filters.eq;
+import java.util.List;
 import org.bson.Document;
-import org.bson.types.ObjectId;
+import org.bson.conversions.Bson;
 
 /**
  *
@@ -24,12 +26,21 @@ public class DataLoader
 //            database.createCollection("students");
     }
     
-    public MongoCollection<Document> getStudents()
+    public List<Student> getStudents()
     {
         MongoDatabase database = client.getDatabase("ScheduleDatabase");
         MongoCollection collection = database.getCollection("students");
+        Gson gson = new Gson();
+        List<Student> students = Lists.newArrayList();
+        for (Object object : collection.find())
+        {
+            Document doc = (Document) object;
+            System.out.println(doc);
+            Student student = gson.fromJson(doc.toJson(), Student.class);
+            students.add(student);
+        }
         
-        return collection;
+        return students;
     }
     
     public Student getStudent(String studentId)
@@ -38,8 +49,9 @@ public class DataLoader
         MongoCollection collection = database.getCollection("students");
         
         Gson gson = new Gson();
-        Document doc = (Document) collection.find(eq("_id", new ObjectId(studentId))).first();
-        System.out.println(doc.toJson());
+        Document doc = (Document) collection.find(eq("personId", studentId)).first();
+        if (doc == null)
+            throw new IllegalArgumentException("Student ID: " + studentId + " doesn't exist");
         return gson.fromJson(doc.toJson(), Student.class);
     }
     
@@ -59,8 +71,31 @@ public class DataLoader
         
         Gson gson = new Gson();
         String json = gson.toJson(student);
+        System.out.println(json);
         
-        collection.updateOne(eq("_id", new ObjectId("58881f094b6fb33573e2f683")), Document.parse(json));
+        collection.replaceOne(eq("personId", student.getPersonId()), Document.parse(json));
+    }
+    
+    /**
+     * Probably shouldn't leave this here forever 
+     * It will drop the students collection in mongodb :(
+     */
+    public void deleteStudents()
+    {
+        MongoDatabase database = client.getDatabase("ScheduleDatabase");
+        MongoCollection collection = database.getCollection("students");
+        
+        collection.drop();
+    }
+    public void deleteStudent(Student student)
+    {
+        MongoDatabase database = client.getDatabase("ScheduleDatabase");
+        MongoCollection collection = database.getCollection("students");
+        
+        Gson gson = new Gson();
+        String json = gson.toJson(student);
+        
+        collection.deleteOne(eq("personId", student.getPersonId()));
     }
     
 }
