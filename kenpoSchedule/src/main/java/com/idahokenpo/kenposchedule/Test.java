@@ -35,6 +35,7 @@ public class Test
     {
         doTest();
 //        doDatabaseTest();
+        doBillingTest();
 
     }
 
@@ -122,5 +123,10 @@ public class Test
         {
             System.out.println(s);
         }
+    }
+
+    private static void doBillingTest()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
