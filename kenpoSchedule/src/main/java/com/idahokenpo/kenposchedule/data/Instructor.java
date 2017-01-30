@@ -1,6 +1,5 @@
 package com.idahokenpo.kenposchedule.data;
 
-import java.util.Set;
 import lombok.Data;
 
 /**
@@ -10,7 +9,7 @@ import lombok.Data;
 @Data
 public class Instructor extends Person
 {
-    private Set<Student> students; // why is this here?
+    //private Set<Student> students; // why is this here?
     private LessonCost lessonCost;
     private Schedule schedule;
 }
