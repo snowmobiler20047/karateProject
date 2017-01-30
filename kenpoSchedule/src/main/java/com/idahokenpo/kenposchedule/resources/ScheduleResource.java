@@ -23,6 +23,7 @@ public class ScheduleResource
     
     @GET
     @Produces("application/json")
+    @Path("students")
     public Response getStudents()
     {
         List<Student> students = studentLoader.getStudents();

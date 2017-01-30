@@ -33,9 +33,9 @@ public class Test
 
     public static void main(String[] args)
     {
-        doTest();
-//        doDatabaseTest();
-        doBillingTest();
+//        doTest();
+        doDatabaseTest();
+//        doBillingTest();
 
     }
 
@@ -107,10 +107,10 @@ public class Test
         StudentDao loader = new StudentDao();
         //loader.deleteStudents();
         Student student = new Student();
-        student.setFirstName("firstname");
-        student.setLastName("lastname");
-        student.setRank(BeltRank.GREEN);
-        //loader.insertStudent(student);
+        student.setFirstName("Kat");
+        student.setLastName("Dogg");
+        student.setRank(BeltRank.SECOND_BLACK);
+//        loader.insertStudent(student);
 
         //List<Student> students = loader.getStudents();
 //        Student student2 = loader.getStudent(students.get(0).getPersonId());
