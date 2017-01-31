@@ -8,7 +8,8 @@ public enum CollectionNamesHelper
 {
     STUDENTS("students", "personId"),
     ACCOUNTS("accounts", "accountId"),
-    INSTRUCTORS("instructors", "personId");
+    INSTRUCTORS("instructors", "personId"),
+    WEEKLY_SCHEDULE("weekly-schedule", "weeklyScheduleId");
     
     private final String collectionName;
     private final String keyId;

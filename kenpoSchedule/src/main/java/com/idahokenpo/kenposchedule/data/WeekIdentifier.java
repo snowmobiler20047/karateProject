@@ -1,5 +1,9 @@
 package com.idahokenpo.kenposchedule.data;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import lombok.Data;
@@ -26,6 +30,14 @@ public class WeekIdentifier implements Comparable<WeekIdentifier>
     public WeekIdentifier()
     {
         Calendar calendar = GregorianCalendar.getInstance();
+        this.weekOfYear = calendar.get(Calendar.WEEK_OF_YEAR);
+        this.year = calendar.get(Calendar.YEAR);
+    }
+    
+    public WeekIdentifier(LocalDate referenceDate)
+    {
+        ZonedDateTime referenceDateTime = ZonedDateTime.of(referenceDate, LocalTime.NOON, ZoneId.systemDefault());
+        GregorianCalendar calendar = GregorianCalendar.from(referenceDateTime);
         this.weekOfYear = calendar.get(Calendar.WEEK_OF_YEAR);
         this.year = calendar.get(Calendar.YEAR);
     }
