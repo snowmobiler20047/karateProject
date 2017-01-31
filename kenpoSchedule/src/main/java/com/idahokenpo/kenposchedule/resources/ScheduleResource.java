@@ -2,7 +2,9 @@ package com.idahokenpo.kenposchedule.resources;
 
 import com.google.gson.Gson;
 import com.idahokenpo.kenposchedule.dao.DataLoader;
+import com.idahokenpo.kenposchedule.dao.InstructorDao;
 import com.idahokenpo.kenposchedule.dao.StudentDao;
+import com.idahokenpo.kenposchedule.data.Instructor;
 import com.idahokenpo.kenposchedule.data.Student;
 import java.util.List;
 import javax.ws.rs.GET;
@@ -32,8 +34,11 @@ public class ScheduleResource
     
     @GET
     @Produces("application/json")
+    @Path("instructors")
     public Response getInstructors()
     {
-        return null;
+        InstructorDao instructorDao = new InstructorDao();
+        List<Instructor> instructors = instructorDao.getInstructors();
+        return Response.status(Response.Status.OK).entity(gson.toJson(instructors)).build();
     }
 }

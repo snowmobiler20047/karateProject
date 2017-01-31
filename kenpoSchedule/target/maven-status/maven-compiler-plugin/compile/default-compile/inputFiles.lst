@@ -5,6 +5,7 @@
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/data/TimeSlot.java
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/data/Student.java
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/utils/DatabaseUtils.java
+/Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/dao/InstructorDao.java
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/Test.java
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/dao/CollectionNamesHelper.java
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/data/LessonType.java

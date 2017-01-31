@@ -7,7 +7,8 @@ package com.idahokenpo.kenposchedule.dao;
 public enum CollectionNamesHelper
 {
     STUDENTS("students", "personId"),
-    ACCOUNTS("accounts", "accountId");
+    ACCOUNTS("accounts", "accountId"),
+    INSTRUCTORS("instructors", "personId");
     
     private final String collectionName;
     private final String keyId;

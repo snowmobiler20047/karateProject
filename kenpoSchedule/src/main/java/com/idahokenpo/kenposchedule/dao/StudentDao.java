@@ -3,6 +3,7 @@ package com.idahokenpo.kenposchedule.dao;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.idahokenpo.kenposchedule.data.Student;
+import com.idahokenpo.kenposchedule.data.serialization.SerializationUtils;
 import com.idahokenpo.kenposchedule.utils.DatabaseUtils;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -18,7 +19,7 @@ public class StudentDao
 {
     private final MongoDatabase database = DatabaseUtils.getDatabase();
     private final MongoCollection collection = database.getCollection(CollectionNamesHelper.STUDENTS.getCollectionName());
-    private final Gson gson = new Gson();
+    private final Gson gson = SerializationUtils.getGson();
 
     public List<Student> getStudents()
     {

@@ -11,8 +11,8 @@ import lombok.Data;
 @Data
 public class WeekIdentifier implements Comparable<WeekIdentifier>
 {
-    private final int weekOfYear;
-    private final int year;
+    private int weekOfYear;
+    private int year;
 
     public WeekIdentifier(int weekOfYear, int year)
     {

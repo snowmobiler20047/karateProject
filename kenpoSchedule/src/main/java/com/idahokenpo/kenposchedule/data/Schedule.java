@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class Schedule
 {
-    private final NavigableMap<WeekIdentifier, WeeklySchedule> weeklyScheduleMap;
+    private NavigableMap<WeekIdentifier, WeeklySchedule> weeklyScheduleMap;
     
     public Schedule()
     {
@@ -25,6 +25,5 @@ public class Schedule
     {
         
     }
-    
     
 }

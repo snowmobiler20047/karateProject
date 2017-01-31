@@ -14,7 +14,7 @@ import lombok.Data;
 @Data
 public class WeeklySchedule
 {
-    private final Map<DayOfWeek, NavigableSet<TimeSlot>> dayToTimeslotsMap;
+    private Map<DayOfWeek, NavigableSet<TimeSlot>> dayToTimeslotsMap;
     
     public WeeklySchedule()
     {
