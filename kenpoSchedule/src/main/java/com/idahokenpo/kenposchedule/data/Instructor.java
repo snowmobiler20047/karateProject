@@ -11,4 +11,5 @@ public class Instructor extends Person
 {
     private LessonCost lessonCost;
     private Schedule schedule;
+    private WeeklySchedule permenantSchedule = new WeeklySchedule();
 }

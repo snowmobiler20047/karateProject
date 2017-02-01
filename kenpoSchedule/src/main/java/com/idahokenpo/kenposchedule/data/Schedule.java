@@ -1,7 +1,7 @@
 package com.idahokenpo.kenposchedule.data;
 
-import com.google.common.collect.Maps;
 import java.util.NavigableMap;
+import java.util.TreeMap;
 import lombok.Data;
 
 /**
@@ -11,14 +11,17 @@ import lombok.Data;
 @Data
 public class Schedule
 {
-    private NavigableMap<WeekIdentifier, WeeklySchedule> weeklyScheduleMap;
+    transient private NavigableMap<WeekIdentifier, WeeklySchedule> weeklyScheduleMap;
+    private NavigableMap<WeekIdentifier, String> weeklyScheduleIdMap;
     
     public Schedule()
     {
-        weeklyScheduleMap = Maps.newTreeMap();
-        
-        weeklyScheduleMap.put(new WeekIdentifier(), new WeeklySchedule());
-        
+        weeklyScheduleMap = new TreeMap();
+        weeklyScheduleIdMap = new TreeMap();
+        WeekIdentifier weekId = new WeekIdentifier();
+        WeeklySchedule weeklySchedule = new WeeklySchedule();
+        weeklyScheduleMap.put(weekId, weeklySchedule);
+        weeklyScheduleIdMap.put(weekId, weeklySchedule.getWeeklyScheduleId());                
     }
 
     public void addNextWeek(WeeklySchedule schedule)

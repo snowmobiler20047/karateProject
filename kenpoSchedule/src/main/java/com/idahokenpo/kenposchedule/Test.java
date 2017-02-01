@@ -183,7 +183,7 @@ public class Test
         otherTimeSlot.setLesson(lesson2);
         
         InstructorDao dao = new InstructorDao();
-//        dao.clear();
+        dao.clear();
         dao.insertInstructor(instructor);
         for (Instructor instructor1 : dao.getInstructors())
         {

@@ -23,6 +23,8 @@
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/data/KenpoHour.java
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/data/serialization/WeekIdentifierSerializer.java
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/billing/Payment.java
+/Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/dao/AbstractDao.java
+/Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/dao/WeeklyScheduleDao.java
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/data/Lesson.java
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/resources/ScheduleResource.java
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/billing/Billing.java
