@@ -33,7 +33,7 @@ public class Billing
          
         return sb.toString();
     }
-    public String runReportForAccount(final String accountId, LocalDate date)
+    public String runReportForAccount(String accountId, LocalDate date)
     {
         Account account = accountMap.get(accountId);
         

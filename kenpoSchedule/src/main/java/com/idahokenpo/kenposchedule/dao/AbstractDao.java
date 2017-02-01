@@ -5,6 +5,8 @@ import com.idahokenpo.kenposchedule.data.serialization.SerializationUtils;
 import com.idahokenpo.kenposchedule.utils.DatabaseUtils;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -17,12 +19,18 @@ public abstract class AbstractDao<T>
     protected final Gson gson = SerializationUtils.getGson();
     
     protected abstract MongoCollection getCollection();
+    public abstract List<T> getAll();
+    public abstract List<T> get(Set<String> ids);
+    public abstract T get(String id);
+    public abstract void update(Set<T> values);
+    public abstract void update(T value);
+    public abstract void insert(T value);
     
     /**
      * Probably shouldn't leave this here forever It will drop the
      * collection in mongodb :(
      */
-    public void deleteStudents()
+    public void drop()
     {
         getCollection().drop();
     }
