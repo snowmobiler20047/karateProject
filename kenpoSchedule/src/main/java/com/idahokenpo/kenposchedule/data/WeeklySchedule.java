@@ -41,8 +41,15 @@ public class WeeklySchedule
         {
             NavigableSet<TimeSlot> timeSlotSet = new TreeSet(entry.getValue());
             dayToTimeslotsMap.put(entry.getKey(), timeSlotSet);
-        }
-        
+        }  
+    }
+    
+    public void addTimeSlot(DayOfWeek dayOfWeek, TimeSlot timeslot)
+    {
+        NavigableSet<TimeSlot> timeslotSet = dayToTimeslotsMap.get(dayOfWeek);
+        if (timeslotSet.contains(timeslot))
+            throw new IllegalArgumentException("Timeslot already exists");
+        timeslotSet.add(timeslot);
     }
     
 }
