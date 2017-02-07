@@ -52,4 +52,10 @@ public class WeeklySchedule
         timeslotSet.add(timeslot);
     }
     
+    public void removeTimeSlot(DayOfWeek dayOfWeek, TimeSlot timeslot)
+    {
+        NavigableSet<TimeSlot> timeslotSet = dayToTimeslotsMap.get(dayOfWeek);
+        timeslotSet.remove(timeslot);
+    }
+    
 }

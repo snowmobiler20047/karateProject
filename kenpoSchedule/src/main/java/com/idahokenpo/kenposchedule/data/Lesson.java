@@ -23,6 +23,11 @@ public class Lesson
     {
         return students.add(student);
     }
+    
+    public boolean removeStudent(Student student)
+    {
+        return students.remove(student);
+    }
 
     public double calculateCost(Instructor instructor)
     {

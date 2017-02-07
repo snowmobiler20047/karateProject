@@ -42,7 +42,7 @@ public class ScheduleResource
     {
         InstructorDao instructorDao = new InstructorDao();
         List<Instructor> instructors = instructorDao.getInstructors();
-        return Response.ok().entity(gson.toJson(instructors)).build();
+        return Response.ok().header("Content-Type", "application/json").entity(gson.toJson(instructors)).build();
     }
     
     @GET
