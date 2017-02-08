@@ -3,6 +3,7 @@ package com.idahokenpo.kenposchedule;
 import com.google.gson.Gson;
 import com.idahokenpo.kenposchedule.dao.InstructorDao;
 import com.idahokenpo.kenposchedule.dao.StudentDao;
+import com.idahokenpo.kenposchedule.dao.WeeklyScheduleDao;
 import com.idahokenpo.kenposchedule.data.BeltRank;
 import com.idahokenpo.kenposchedule.data.Instructor;
 import com.idahokenpo.kenposchedule.data.KenpoHour;
@@ -129,8 +130,8 @@ public class Test
     private static void doDatabaseTest2()
     {
         Gson gson = SerializationUtils.getGson();
-        String json = gson.toJson(new WeekIdentifier());
-        WeekIdentifier weekId = gson.fromJson(json, WeekIdentifier.class);
+//        String json = gson.toJson(new WeekIdentifier());
+//        WeekIdentifier weekId = gson.fromJson(json, WeekIdentifier.class);
 //        System.out.println(json + "\n" + weekId);
         
 //        //map
@@ -143,10 +144,10 @@ public class Test
         
         
         //schedule
-        json = gson.toJson(new Schedule());
-        System.out.println(json);
-        Schedule scheduleFromJson = gson.fromJson(json, Schedule.class);
-        System.out.println(json + "\n" + scheduleFromJson);
+//        json = gson.toJson(new Schedule());
+//        System.out.println(json);
+//        Schedule scheduleFromJson = gson.fromJson(json, Schedule.class);
+//        System.out.println(json + "\n" + scheduleFromJson);
         
         Schedule schedule = new Schedule();
         KenpoTime startTime = new KenpoTime(KenpoHour.FIVE, KenpoMinute.FORTY_FIVE, false);
@@ -155,15 +156,18 @@ public class Test
 
         TimeSlot otherTimeSlot = new TimeSlot(new KenpoTime(KenpoHour.SIX, KenpoMinute.THIRTY, false), new KenpoTime(KenpoHour.SEVEN, KenpoMinute.ZERO, false));
 
-        schedule.getWeeklyScheduleMap().get(new WeekIdentifier()).getDayToTimeslotsMap().get(DayOfWeek.THURSDAY).add(timeSlot);
-        schedule.getWeeklyScheduleMap().get(new WeekIdentifier()).getDayToTimeslotsMap().get(DayOfWeek.THURSDAY).add(otherTimeSlot);
+        WeekIdentifier weekId = new WeekIdentifier();
+        schedule.getWeeklyScheduleMap().get(weekId).getDayToTimeslotsMap().get(DayOfWeek.THURSDAY).add(timeSlot);
+        schedule.getWeeklyScheduleMap().get(weekId).getDayToTimeslotsMap().get(DayOfWeek.THURSDAY).add(otherTimeSlot);
 
+        WeeklyScheduleDao scheduleDao = new WeeklyScheduleDao();
+        scheduleDao.insert(schedule.getWeeklyScheduleMap().get(weekId));
         
         
         Instructor instructor = new Instructor();
-        instructor.setPrefix("Mr");
+        instructor.setPrefix("Ms");
         instructor.setFirstName("First");
-        instructor.setLastName("Last");
+        instructor.setLastName("Wu");
         instructor.setLessonCost(LessonCost.NORMAL_PRIVATE);
         instructor.setSchedule(schedule);
 

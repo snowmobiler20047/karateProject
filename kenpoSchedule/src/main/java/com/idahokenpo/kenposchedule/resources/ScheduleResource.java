@@ -13,6 +13,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 /**
@@ -48,10 +49,10 @@ public class ScheduleResource
     @GET
     @Produces("application/json")
     @Path("weeklySchedule")
-    public Response getWeeklySchedules()
+    public Response getWeeklySchedule(@QueryParam("weeklyScheduleId") String weeklyScheduleId)
     {
         WeeklyScheduleDao dao = new WeeklyScheduleDao();
-        return Response.ok().entity(gson.toJson(dao.getAll())).build();
+        return Response.ok().entity(gson.toJson(dao.get(weeklyScheduleId))).build();
     }
     @PUT
     @Path("weeklySchedule")
