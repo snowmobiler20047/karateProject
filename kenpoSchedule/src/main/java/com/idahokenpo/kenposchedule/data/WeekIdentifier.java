@@ -4,8 +4,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.WeekFields;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import lombok.Data;
 
 /**
@@ -17,21 +19,23 @@ public class WeekIdentifier implements Comparable<WeekIdentifier>
 {
     private int weekOfYear;
     private int year;
-
-    public WeekIdentifier(int weekOfYear, int year)
-    {
-        this.weekOfYear = weekOfYear;
-        this.year = year;
-    }
+    private LocalDate billingDate;
     
     /**
      * create a new WeekIdentifier with defaulting to this week
      */
     public WeekIdentifier()
     {
-        Calendar calendar = GregorianCalendar.getInstance();
-        this.weekOfYear = calendar.get(Calendar.WEEK_OF_YEAR);
-        this.year = calendar.get(Calendar.YEAR);
+        this(GregorianCalendar.getInstance().get(Calendar.WEEK_OF_YEAR),
+                GregorianCalendar.getInstance().get(Calendar.YEAR), 
+                LocalDate.now().with(WeekFields.of(Locale.US).dayOfWeek(), 7));
+    }
+
+    public WeekIdentifier(int weekOfYear, int year, LocalDate billingDate)
+    {
+        this.weekOfYear = weekOfYear;
+        this.year = year;
+        this.billingDate = billingDate;
     }
     
     public WeekIdentifier(LocalDate referenceDate)
@@ -40,6 +44,7 @@ public class WeekIdentifier implements Comparable<WeekIdentifier>
         GregorianCalendar calendar = GregorianCalendar.from(referenceDateTime);
         this.weekOfYear = calendar.get(Calendar.WEEK_OF_YEAR);
         this.year = calendar.get(Calendar.YEAR);
+        this.billingDate = referenceDate;
     }
 
     @Override

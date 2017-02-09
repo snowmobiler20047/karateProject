@@ -161,6 +161,7 @@ public class Test
         schedule.getWeeklyScheduleMap().get(weekId).getDayToTimeslotsMap().get(DayOfWeek.THURSDAY).add(otherTimeSlot);
 
         WeeklyScheduleDao scheduleDao = new WeeklyScheduleDao();
+        scheduleDao.drop();
         scheduleDao.insert(schedule.getWeeklyScheduleMap().get(weekId));
         
         
@@ -187,7 +188,7 @@ public class Test
         otherTimeSlot.setLesson(lesson2);
         
         InstructorDao dao = new InstructorDao();
-//        dao.clear();
+        dao.clear();
         dao.insertInstructor(instructor);
         for (Instructor instructor1 : dao.getInstructors())
         {

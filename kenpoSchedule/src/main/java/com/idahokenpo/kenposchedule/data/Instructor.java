@@ -1,6 +1,7 @@
 package com.idahokenpo.kenposchedule.data;
 
 import lombok.Data;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -12,4 +13,11 @@ public class Instructor extends Person
     private LessonCost lessonCost;
     private Schedule schedule;
     private WeeklySchedule permenantSchedule = new WeeklySchedule();
+
+    public Instructor()
+    {
+        this.personId = new ObjectId().toHexString();
+    }
+    
+    
 }

@@ -25,6 +25,7 @@ public class WeekIdentifierSerializer implements JsonSerializer<WeekIdentifier>
         JsonObject obj = new JsonObject();
         obj.addProperty("weekOfYear", weekId.getWeekOfYear());
         obj.addProperty("year", weekId.getYear());
+        obj.addProperty("billingDate", weekId.getBillingDate().toString());
         return obj;
     }
     
