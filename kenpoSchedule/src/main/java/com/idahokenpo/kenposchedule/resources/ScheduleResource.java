@@ -73,4 +73,19 @@ public class ScheduleResource
         WeeklySchedule weeklySchedule = controller.getNextWeeklySchedule(instructorId, weekId);
         return Response.ok().entity(gson.toJson(weeklySchedule)).build();
     }
+    
+    /**
+     * This will get or create the next weekly schedule.
+     * @param instructorId
+     * @param weekId
+     * @return 
+     */
+    @PUT
+    @Path("prevWeeklySchedule")
+    public Response getPrevWeeklySchedule(@FormParam("instructorId") String instructorId, @FormParam("weekId") WeekIdentifier weekId)
+    {
+        Controller controller = new Controller();
+        WeeklySchedule weeklySchedule = controller.getPrevWeeklySchedule(instructorId, weekId);
+        return Response.ok().entity(gson.toJson(weeklySchedule)).build();
+    }
 }

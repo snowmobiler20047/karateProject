@@ -16,7 +16,7 @@ public class Controller
     private final InstructorDao instructorDao = new InstructorDao();
     private final WeeklyScheduleDao weeklyScheduleDao = new WeeklyScheduleDao();
 
-    private WeeklySchedule createNextWeeklySchedule(String instructorId)
+    public WeeklySchedule createNextWeeklySchedule(String instructorId)
     {
         Instructor instructor = instructorDao.get(instructorId);
         
@@ -40,6 +40,27 @@ public class Controller
         weeklyScheduleDao.insert(weeklySchedule);
         
         instructor.getSchedule().addNextWeek(weeklySchedule);
+        instructorDao.update(instructor);
+        return weeklySchedule;
+    }
+
+    public WeeklySchedule getPrevWeeklySchedule(String instructorId, WeekIdentifier weekId)
+    {
+        Instructor instructor = instructorDao.get(instructorId);
+        
+        NavigableMap<WeekIdentifier, String> weeklyScheduleIdMap = instructor.getSchedule().getWeeklyScheduleIdMap();
+        String prevWeekId = weeklyScheduleIdMap.get(new WeekIdentifier(weekId.getBillingDate().minusWeeks(1)));
+        if (prevWeekId == null)
+            return createPrevWeeklySchedule(instructor);
+                
+        return weeklyScheduleDao.get(prevWeekId); 
+    }
+    
+    private WeeklySchedule createPrevWeeklySchedule(Instructor instructor) {
+        WeeklySchedule weeklySchedule = new WeeklySchedule(instructor.getPermenantSchedule());
+        weeklyScheduleDao.insert(weeklySchedule);
+        
+        instructor.getSchedule().addPrevWeek(weeklySchedule);
         instructorDao.update(instructor);
         return weeklySchedule;
     }

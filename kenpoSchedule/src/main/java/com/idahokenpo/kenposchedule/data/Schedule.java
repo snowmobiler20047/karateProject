@@ -24,13 +24,22 @@ public class Schedule
         weeklyScheduleIdMap.put(weekId, weeklySchedule.getWeeklyScheduleId());                
     }
 
-    public void addNextWeek(WeeklySchedule schedule)
+    public void addNextWeek(WeeklySchedule weeklySchedule)
     {
         WeekIdentifier weekId = weeklyScheduleIdMap.lastKey();
-        WeekIdentifier nextWeekId = new WeekIdentifier(weekId.getBillingDate().plusDays(7));
+        WeekIdentifier nextWeekId = new WeekIdentifier(weekId.getBillingDate().plusWeeks(1));
         
-        weeklyScheduleMap.put(nextWeekId, schedule);
-        weeklyScheduleIdMap.put(nextWeekId, schedule.getWeeklyScheduleId());
+        weeklyScheduleMap.put(nextWeekId, weeklySchedule);
+        weeklyScheduleIdMap.put(nextWeekId, weeklySchedule.getWeeklyScheduleId());
+    }
+
+    public void addPrevWeek(WeeklySchedule weeklySchedule)
+    {
+        WeekIdentifier weekId = weeklyScheduleIdMap.lastKey();
+        WeekIdentifier nextWeekId = new WeekIdentifier(weekId.getBillingDate().minusWeeks(1));
+        
+        weeklyScheduleMap.put(nextWeekId, weeklySchedule);
+        weeklyScheduleIdMap.put(nextWeekId, weeklySchedule.getWeeklyScheduleId());
     }
     
 }
