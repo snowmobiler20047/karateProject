@@ -190,7 +190,7 @@ public class Test
         InstructorDao dao = new InstructorDao();
         dao.clear();
         dao.insertInstructor(instructor);
-        for (Instructor instructor1 : dao.getInstructors())
+        for (Instructor instructor1 : dao.getAll())
         {
             System.out.println(instructor1);
         }

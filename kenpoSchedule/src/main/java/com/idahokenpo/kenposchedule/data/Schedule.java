@@ -26,7 +26,11 @@ public class Schedule
 
     public void addNextWeek(WeeklySchedule schedule)
     {
+        WeekIdentifier weekId = weeklyScheduleIdMap.lastKey();
+        WeekIdentifier nextWeekId = new WeekIdentifier(weekId.getBillingDate().plusDays(7));
         
+        weeklyScheduleMap.put(nextWeekId, schedule);
+        weeklyScheduleIdMap.put(nextWeekId, schedule.getWeeklyScheduleId());
     }
     
 }
