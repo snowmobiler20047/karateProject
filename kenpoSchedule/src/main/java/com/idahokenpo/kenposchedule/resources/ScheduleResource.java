@@ -1,19 +1,16 @@
 package com.idahokenpo.kenposchedule.resources;
 
 import com.google.gson.Gson;
-import com.idahokenpo.kenposchedule.Controller;
 import com.idahokenpo.kenposchedule.dao.DataLoader;
 import com.idahokenpo.kenposchedule.dao.InstructorDao;
 import com.idahokenpo.kenposchedule.dao.StudentDao;
 import com.idahokenpo.kenposchedule.dao.WeeklyScheduleDao;
-import com.idahokenpo.kenposchedule.data.Instructor;
 import com.idahokenpo.kenposchedule.data.Student;
-import com.idahokenpo.kenposchedule.data.WeekIdentifier;
-import com.idahokenpo.kenposchedule.data.WeeklySchedule;
+import com.idahokenpo.kenposchedule.data.serialization.SerializationUtils;
+import io.swagger.annotations.Api;
 import java.util.List;
-import javax.ws.rs.FormParam;
+import javax.inject.Singleton;
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -23,13 +20,15 @@ import javax.ws.rs.core.Response;
  *
  * @author Korey
  */
-@Path("/")
+@Singleton
+@Path("schedule")
+@Api
 public class ScheduleResource 
 {
     private static final DataLoader loader = new DataLoader();
     private static final StudentDao studentLoader = new StudentDao();
     private static final InstructorDao instructorDao = new InstructorDao();
-    private final Gson gson = new Gson();
+    Gson gson = SerializationUtils.getGson();
     
     @GET
     @Produces("application/json")
@@ -38,16 +37,6 @@ public class ScheduleResource
     {
         List<Student> students = studentLoader.getStudents();
         return Response.ok().entity(gson.toJson(students)).build();
-    }
-    
-    @GET
-    @Produces("application/json")
-    @Path("instructors")
-    public Response getInstructors()
-    {
-        
-        List<Instructor> instructors = instructorDao.getAll();
-        return Response.ok().header("Content-Type", "application/json").entity(gson.toJson(instructors)).build();
     }
     
     @GET
@@ -65,14 +54,14 @@ public class ScheduleResource
      * @param weekId
      * @return 
      */
-    @PUT
-    @Path("nextWeeklySchedule")
-    public Response getNextWeeklySchedule(@FormParam("instructorId") String instructorId, @FormParam("weekId") WeekIdentifier weekId)
-    {
-        Controller controller = new Controller();
-        WeeklySchedule weeklySchedule = controller.getNextWeeklySchedule(instructorId, weekId);
-        return Response.ok().entity(gson.toJson(weeklySchedule)).build();
-    }
+//    @POST
+//    @Path("nextWeeklySchedule")
+//    public Response getNextWeeklySchedule(@FormParam("instructorId") String instructorId, @FormParam("weekId") WeekIdentifier weekId)
+//    {
+//        Controller controller = new Controller();
+//        WeeklySchedule weeklySchedule = controller.getNextWeeklySchedule(instructorId, weekId);
+//        return Response.ok().entity(gson.toJson(weeklySchedule)).build();
+//    }
     
     /**
      * This will get or create the next weekly schedule.
@@ -80,12 +69,12 @@ public class ScheduleResource
      * @param weekId
      * @return 
      */
-    @PUT
-    @Path("prevWeeklySchedule")
-    public Response getPrevWeeklySchedule(@FormParam("instructorId") String instructorId, @FormParam("weekId") WeekIdentifier weekId)
-    {
-        Controller controller = new Controller();
-        WeeklySchedule weeklySchedule = controller.getPrevWeeklySchedule(instructorId, weekId);
-        return Response.ok().entity(gson.toJson(weeklySchedule)).build();
-    }
+//    @POST
+//    @Path("prevWeeklySchedule")
+//    public Response getPrevWeeklySchedule(@FormParam("instructorId") String instructorId, @FormParam("weekId") WeekIdentifier weekId)
+//    {
+//        Controller controller = new Controller();
+//        WeeklySchedule weeklySchedule = controller.getPrevWeeklySchedule(instructorId, weekId);
+//        return Response.ok().entity(gson.toJson(weeklySchedule)).build();
+//    }
 }
