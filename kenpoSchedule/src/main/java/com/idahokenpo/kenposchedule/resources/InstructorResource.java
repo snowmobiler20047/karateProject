@@ -8,6 +8,7 @@ import com.idahokenpo.kenposchedule.data.WeeklySchedule;
 import com.idahokenpo.kenposchedule.data.serialization.SerializationUtils;
 import io.swagger.annotations.Api;
 import java.util.List;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -47,7 +48,8 @@ public class InstructorResource
             @FormParam("email") String email,
             @FormParam("address") String address,
             @FormParam("lessonCost") String lessonCost,
-            @FormParam("phoneNumber") String phoneNumber)
+            @FormParam("phoneNumber") String phoneNumber,
+            @FormParam("active") boolean active)
     {
         Instructor instructor = new Instructor();
         instructor.setPrefix(prefix);
@@ -59,6 +61,7 @@ public class InstructorResource
         instructor.setLessonCost(LessonCost.valueOf(lessonCost));
         instructor.setPermenantSchedule(new WeeklySchedule());
         instructor.setPhoneNumber(phoneNumber);
+        instructor.setActive(active);
 
         instructorDao.insert(instructor);
 
@@ -76,7 +79,8 @@ public class InstructorResource
             @FormParam("email") String email,
             @FormParam("address") String address,
             @FormParam("lessonCost") String lessonCost,
-            @FormParam("phoneNumber") String phoneNumber)
+            @FormParam("phoneNumber") String phoneNumber,
+            @FormParam("active") @DefaultValue("true") boolean active)
     {
         Instructor instructor = instructorDao.get(instructorId);
         instructor.setPrefix(prefix);
@@ -88,6 +92,7 @@ public class InstructorResource
         instructor.setLessonCost(LessonCost.valueOf(lessonCost));
         instructor.setPermenantSchedule(new WeeklySchedule());
         instructor.setPhoneNumber(phoneNumber);
+        instructor.setActive(active);
 
         instructorDao.update(instructor);
 
