@@ -20,6 +20,7 @@ public class Account
     private String accountId;
     private NavigableMap<LocalDate, Balance> balanceHistory;
     private NavigableMap<LocalDate, Set<Payment>> paymentHistory;
+    private boolean active;
 
     public Account()
     {
