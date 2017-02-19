@@ -25,6 +25,7 @@
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/billing/AccountStatus.java
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/data/LessonCost.java
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/data/Person.java
+/Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/resources/AccountResource.java
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/data/KenpoHour.java
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/data/serialization/WeekIdentifierSerializer.java
 /Users/Korey/NetBeansProjects/karateProject/kenpoSchedule/src/main/java/com/idahokenpo/kenposchedule/billing/Payment.java

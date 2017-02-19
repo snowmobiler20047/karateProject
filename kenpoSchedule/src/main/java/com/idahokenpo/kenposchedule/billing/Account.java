@@ -18,6 +18,7 @@ import org.bson.types.ObjectId;
 public class Account
 {
     private String accountId;
+    private String name;
     private NavigableMap<LocalDate, Balance> balanceHistory;
     private NavigableMap<LocalDate, Set<Payment>> paymentHistory;
     private boolean active;
@@ -55,7 +56,7 @@ public class Account
     
     public AccountStatus getAccountStatus(LocalDate date)
     {
-        double balance = balanceHistory.floorEntry(date).getValue().getBalance();
+        double balance = balanceHistory.lowerEntry(date).getValue().getBalance();
         if(balance < 0)
             return AccountStatus.PAYMENT_DUE;
         
@@ -64,6 +65,6 @@ public class Account
 
     public Balance getCurrentBalance(LocalDate date)
     {
-        return balanceHistory.floorEntry(date).getValue();
+        return balanceHistory.lowerEntry(date).getValue();
     }
 }
