@@ -1,7 +1,6 @@
 package com.idahokenpo.kenposchedule.data;
 
 import lombok.Data;
-import org.bson.types.ObjectId;
 
 /**
  *
@@ -18,6 +17,7 @@ public abstract class Person
    private String phoneNumber;
    private String address;
    private String email;
+   private boolean active;
    private BeltRank rank;
    
    public String getNickname()
