@@ -1,5 +1,7 @@
 package com.idahokenpo.kenposchedule.data;
 
+import com.google.gson.Gson;
+import com.idahokenpo.kenposchedule.data.serialization.SerializationUtils;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -47,6 +49,12 @@ public class WeekIdentifier implements Comparable<WeekIdentifier>
         this.billingDate = referenceDate;
     }
 
+    public WeekIdentifier fromString(String str)
+    {
+        Gson gson = SerializationUtils.getGson();
+        
+        return gson.fromJson(str, WeekIdentifier.class);
+    }
     @Override
     public int compareTo(WeekIdentifier o)
     {

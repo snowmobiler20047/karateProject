@@ -26,7 +26,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class GsonProvider<T> implements MessageBodyReader<T>, MessageBodyWriter<T>
+public class GsonProvider<WeeklySchedule> implements MessageBodyReader<WeeklySchedule>, MessageBodyWriter<WeeklySchedule>
 {
     private final Gson gson;
 
@@ -46,7 +46,7 @@ public class GsonProvider<T> implements MessageBodyReader<T>, MessageBodyWriter<
     }
 
     @Override
-    public T readFrom(Class<T> type, Type genericType, Annotation[] annotations,
+    public WeeklySchedule readFrom(Class<WeeklySchedule> type, Type genericType, Annotation[] annotations,
             MediaType mediaType, MultivaluedMap<String, String> httpHeaders,
             InputStream entityStream) throws IOException, WebApplicationException
     {
@@ -69,14 +69,14 @@ public class GsonProvider<T> implements MessageBodyReader<T>, MessageBodyWriter<
     }
 
     @Override
-    public long getSize(T t, Class<?> type, Type genericType,
+    public long getSize(WeeklySchedule t, Class<?> type, Type genericType,
             Annotation[] annotations, MediaType mediaType)
     {
         return -1;
     }
 
     @Override
-    public void writeTo(T t, Class<?> type, Type genericType, Annotation[] annotations,
+    public void writeTo(WeeklySchedule t, Class<?> type, Type genericType, Annotation[] annotations,
             MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
             OutputStream entityStream) throws IOException, WebApplicationException
     {
