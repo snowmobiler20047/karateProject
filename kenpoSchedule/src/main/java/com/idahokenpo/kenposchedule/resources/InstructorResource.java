@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.idahokenpo.kenposchedule.resources;
 
 import com.google.gson.Gson;
@@ -18,6 +13,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
@@ -33,16 +29,16 @@ public class InstructorResource
     Gson gson = SerializationUtils.getGson();
 
     @GET
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("instructors")
     public Response getInstructors()
     {
         List<Instructor> instructors = instructorDao.getAll();
-        return Response.ok().header("Content-Type", "application/json").entity(gson.toJson(instructors)).build();
+        return Response.ok().entity(gson.toJson(instructors)).build();
     }
 
     @POST
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("create")
     public Response createInstructor(@FormParam("prefix") String prefix,
             @FormParam("firstName") String firstName,
@@ -62,21 +58,39 @@ public class InstructorResource
         instructor.setAddress(address);
         instructor.setLessonCost(LessonCost.valueOf(lessonCost));
         instructor.setPermenantSchedule(new WeeklySchedule());
-        instructor.setPhoneNumber(lastName);
-        
+        instructor.setPhoneNumber(phoneNumber);
+
         instructorDao.insert(instructor);
 
-        return Response.ok().header("Content-Type", "application/json").entity(gson.toJson(instructor)).build();
+        return Response.ok().entity(gson.toJson(instructor)).build();
     }
-    
-//    @POST
-//    @Produces("application/json")
-//    @Path("edit")
-//    public Response editInstructor(@FormParam("instructor") Instructor instructor)
-//    {
-//        
-//        instructorDao.update(instructor);
-//
-//        return Response.ok().header("Content-Type", "application/json").entity(gson.toJson(instructor)).build();
-//    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("edit")
+    public Response editInstructor(@FormParam("instructorId") String instructorId,
+            @FormParam("prefix") String prefix,
+            @FormParam("firstName") String firstName,
+            @FormParam("middleName") String middleName,
+            @FormParam("lastName") String lastName,
+            @FormParam("email") String email,
+            @FormParam("address") String address,
+            @FormParam("lessonCost") String lessonCost,
+            @FormParam("phoneNumber") String phoneNumber)
+    {
+        Instructor instructor = instructorDao.get(instructorId);
+        instructor.setPrefix(prefix);
+        instructor.setFirstName(firstName);
+        instructor.setMiddleName(middleName);
+        instructor.setLastName(lastName);
+        instructor.setEmail(email);
+        instructor.setAddress(address);
+        instructor.setLessonCost(LessonCost.valueOf(lessonCost));
+        instructor.setPermenantSchedule(new WeeklySchedule());
+        instructor.setPhoneNumber(phoneNumber);
+
+        instructorDao.update(instructor);
+
+        return Response.ok().entity(gson.toJson(instructor)).build();
+    }
 }
