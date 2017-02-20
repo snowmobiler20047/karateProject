@@ -31,30 +31,31 @@ import javax.ws.rs.core.Response;
 @Path("account")
 public class AccountResource
 {
+
     private final AccountDao accountDao = new AccountDao();
     private final InstructorDao instructorDao = new InstructorDao();
     private final Gson gson = SerializationUtils.getGson();
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("getAccount")
     public Response getAccount(@QueryParam("accountId") String accountId)
     {
         Account account = accountDao.get(accountId);
-        
+
         return Response.ok(gson.toJson(account)).build();
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("getAccounts")
     public Response getAccounts()
     {
         List<Account> accounts = accountDao.getAll();
-        
+
         return Response.ok(gson.toJson(accounts)).build();
     }
-    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("create")
@@ -62,10 +63,32 @@ public class AccountResource
     {
         Account account = new Account();
         account.setActive(true);
-        
+
         accountDao.insert(account);
     }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("edit")
+    public void editAccount(@FormParam("name") String accountId,
+            @FormParam("name") String name,
+            @FormParam("name") Boolean active)
+    {
+        Account account = accountDao.get(accountId);
+        if (name != null)
+        {
+            account.setName(name);
+        }
+        if (active != null)
+        {
+            account.setActive(active);
+        }
+
+        accountDao.update(account);
+    }
     
+    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -76,19 +99,71 @@ public class AccountResource
             @FormParam("time") String timeString)
     {
         Account account = accountDao.get(accountId);
-        
+
         LocalDate date = LocalDate.parse(dateString);
         LocalTime time = LocalTime.parse(timeString);
-        
+
         Payment payment = new Payment(amount, date, time);
-        
+
         account.applyPayment(payment);
-        
+
         accountDao.update(account);
-        
+
         return Response.ok("Payment was successful!").build();
     }
     
+//    @POST
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Path("editPayment")
+//    public Response editPayment(@FormParam("accountId") String accountId,
+//            @FormParam("paymentId") String paymentId,
+//            @FormParam("amount") Double amount,
+//            @FormParam("date") String dateString,
+//            @FormParam("time") String timeString)
+//    {
+//        Account account = accountDao.get(accountId);
+//        
+//        Payment payment = null;
+//        for (Set<Payment> payments : account.getPaymentHistory().values())
+//        {
+//            for (Payment p : payments)
+//            {
+//                if (p.getPaymentId().equals(paymentId))
+//                {   
+//                    payment = p;
+//                    payments.remove(p);
+//                    break;
+//                }
+//            }
+//        }
+//        
+//        if (payment == null)
+//            return Response.notModified().build();
+//        
+//        if (dateString != null)
+//        {
+//            LocalDate date = LocalDate.parse(dateString);
+//            payment.setDate(date);
+//        }
+//        if (timeString != null)
+//        {
+//            LocalTime time = LocalTime.parse(timeString);
+//            payment.setTime(time);
+//        }
+//        
+//        if (amount != null) 
+//        {
+//            payment.setAmount(amount);
+//        }
+//
+//        account.applyPayment(payment);
+//
+//        accountDao.update(account);
+//
+//        return Response.ok("Update of payment was successful!").build();
+//    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -106,16 +181,16 @@ public class AccountResource
         LocalDate billingDate = LocalDate.parse(billingDateString);
         WeekIdentifier weekId = new WeekIdentifier(weekOfYear, year, billingDate);
         String weeklyScheduleId = instructor.getSchedule().getWeeklyScheduleIdMap().get(weekId);
-        
+
         WeeklyScheduleDao weeklyScheduleDao = new WeeklyScheduleDao();
         WeeklySchedule weeklySchedule = weeklyScheduleDao.get(weeklyScheduleId);
-        
+
         Lesson lesson = weeklySchedule.findLesson(lessonId);
         LocalDate date = LocalDate.parse(dateString);
-                
+
         account.applyLessonCost(date, lesson, instructor);
         accountDao.update(account);
-        
+
         return Response.ok("Applying lesson cost was successful!").build();
-    } 
+    }
 }

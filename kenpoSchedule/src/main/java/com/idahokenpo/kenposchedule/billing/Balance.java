@@ -14,7 +14,6 @@ import lombok.Data;
 @Data
 public class Balance
 {
-
     private final double balance;
     private final String type;
     private final String id;
@@ -25,5 +24,4 @@ public class Balance
         this.type = type;
         this.id = id;
     }
-    
 }

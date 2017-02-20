@@ -38,7 +38,7 @@ public class Account
             payments = Sets.newHashSet();
         }
         payments.add(payment);
-        Balance prevBalance = balanceHistory.floorEntry(payment.getDate()).getValue();
+        Balance prevBalance = balanceHistory.lowerEntry(payment.getDate()).getValue();
         
         Balance balance = new Balance(prevBalance.getBalance() + payment.getAmount(), "Payment", payment.getPaymentId());
          
@@ -47,7 +47,7 @@ public class Account
     
     public void applyLessonCost(LocalDate date, Lesson lesson, Instructor instructor)
     {
-        Balance prevBalance = balanceHistory.floorEntry(date).getValue();
+        Balance prevBalance = balanceHistory.lowerEntry(date).getValue();
         
         Balance balance = new Balance(prevBalance.getBalance() - lesson.calculateCost(instructor), "Lesson", lesson.getLessonId());
          
