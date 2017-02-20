@@ -8,13 +8,13 @@ public class KenpoTime implements Comparable<KenpoTime>
 {
     private final KenpoHour hour;
     private final KenpoMinute minute;
-    private final boolean isMorning;
+    private final boolean PM;
 
-    public KenpoTime(KenpoHour hour, KenpoMinute minute, boolean isMorning)
+    public KenpoTime(KenpoHour hour, KenpoMinute minute, boolean PM)
     {
         this.hour = hour;
         this.minute = minute;
-        this.isMorning = isMorning;
+        this.PM = PM;
     }
     
     @Override
@@ -23,7 +23,7 @@ public class KenpoTime implements Comparable<KenpoTime>
         StringBuilder sb = new StringBuilder();
         sb.append(hour.getDisplayValue()).append(":");
         sb.append(minute.getDisplayValue());
-        sb.append(isMorning ? "AM" : "PM");
+        sb.append(PM ? "AM" : "PM");
         
         return sb.toString();
     }
@@ -32,15 +32,15 @@ public class KenpoTime implements Comparable<KenpoTime>
     public int compareTo(KenpoTime o)
     {
         //same time
-        if(this.hour.equals(o.getHour()) && this.minute.equals(o.getMinute()) && this.isMorning == o.isMorning())
+        if(this.hour.equals(o.getHour()) && this.minute.equals(o.getMinute()) && this.PM == o.isPM())
             return 0;
-        //check to see if they are both AM
-        if(this.isMorning != o.isMorning())
+        //check to see if they are both PM
+        if(this.PM != o.isPM())
         {
-            if(this.isMorning == true)
-                return -1;
-            else
+            if(this.PM == true)
                 return 1;
+            else
+                return -1;
         }
         
         if(this.hour.ordinal() < o.getHour().ordinal())
@@ -66,8 +66,18 @@ public class KenpoTime implements Comparable<KenpoTime>
         return minute;
     }
 
-    public boolean isMorning()
+    public boolean isPM()
     {
-        return isMorning;
+        return PM;
+    }
+    
+    public static KenpoTime fromString(String startTimeString)
+    {
+        String[] split = startTimeString.split(": ");
+        KenpoHour hour = KenpoHour.fromString(split[0]);
+        KenpoMinute min = KenpoMinute.fromString(split[1]);
+        boolean pm = split[2].equals("PM");
+         
+        return new KenpoTime(hour, min, pm);
     }
 }

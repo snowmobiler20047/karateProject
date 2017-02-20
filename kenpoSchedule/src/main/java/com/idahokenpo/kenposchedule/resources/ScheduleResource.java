@@ -3,18 +3,23 @@ package com.idahokenpo.kenposchedule.resources;
 import com.google.gson.Gson;
 import com.idahokenpo.kenposchedule.Controller;
 import com.idahokenpo.kenposchedule.dao.WeeklyScheduleDao;
+import com.idahokenpo.kenposchedule.data.KenpoTime;
+import com.idahokenpo.kenposchedule.data.TimeSlot;
 import com.idahokenpo.kenposchedule.data.WeekIdentifier;
 import com.idahokenpo.kenposchedule.data.WeeklySchedule;
 import com.idahokenpo.kenposchedule.data.serialization.SerializationUtils;
 import io.swagger.annotations.Api;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import javax.inject.Singleton;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
@@ -33,8 +38,7 @@ public class ScheduleResource
     @Produces("application/json")
     @Path("weeklySchedule")
     public Response getWeeklySchedule(@QueryParam("weeklyScheduleId") String weeklyScheduleId)
-    {
-        
+    {       
         return Response.ok().entity(gson.toJson(weeklyScheduleDao.get(weeklyScheduleId))).build();
     }
     
@@ -82,5 +86,26 @@ public class ScheduleResource
         
         WeeklySchedule weeklySchedule = controller.getPrevWeeklySchedule(instructorId, weekId);
         return Response.ok().entity(gson.toJson(weeklySchedule)).build();
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("addTimeslot")
+    public Response addTimeslot(@FormParam("weeklyScheduleId") String weeklyScheduleId,
+            @FormParam("day") String dayString,
+            @FormParam("startTime") String startTimeString,
+            @FormParam("endTime") String endTimeString)
+    {
+        WeeklySchedule weeklySchedule = weeklyScheduleDao.get(weeklyScheduleId);
+        
+        DayOfWeek day = DayOfWeek.valueOf(dayString);
+        KenpoTime startTime = KenpoTime.fromString(startTimeString);
+        KenpoTime endTime = KenpoTime.fromString(endTimeString);
+        TimeSlot timeSlot = new TimeSlot(startTime, endTime);
+        
+        weeklySchedule.addTimeSlot(day, timeSlot);
+        weeklyScheduleDao.update(weeklySchedule);
+        
+        return Response.ok().build();
     }
 }

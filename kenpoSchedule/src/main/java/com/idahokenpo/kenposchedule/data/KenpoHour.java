@@ -30,4 +30,14 @@ public enum KenpoHour
     {
         return displayValue;
     }
+    
+    public static KenpoHour fromString(String s)
+    {
+        for (KenpoHour value : values())
+        {
+            if (s.equals(value.getDisplayValue()))
+                return value;
+        }
+        throw new IllegalArgumentException(s + " is not found in " + KenpoHour.class.getSimpleName());
+    }
 }
