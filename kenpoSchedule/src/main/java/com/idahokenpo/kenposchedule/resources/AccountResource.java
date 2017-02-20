@@ -5,7 +5,11 @@ import com.idahokenpo.kenposchedule.billing.Account;
 import com.idahokenpo.kenposchedule.billing.Payment;
 import com.idahokenpo.kenposchedule.dao.AccountDao;
 import com.idahokenpo.kenposchedule.dao.InstructorDao;
+import com.idahokenpo.kenposchedule.dao.WeeklyScheduleDao;
 import com.idahokenpo.kenposchedule.data.Instructor;
+import com.idahokenpo.kenposchedule.data.Lesson;
+import com.idahokenpo.kenposchedule.data.WeekIdentifier;
+import com.idahokenpo.kenposchedule.data.WeeklySchedule;
 import com.idahokenpo.kenposchedule.data.serialization.SerializationUtils;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -53,6 +57,7 @@ public class AccountResource
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Path("create")
     public void createAccount(@FormParam("name") String name)
     {
         Account account = new Account();
@@ -91,18 +96,25 @@ public class AccountResource
     public Response applyLessonCost(@FormParam("accountId") String accountId,
             @FormParam("lessonId") String lessonId,
             @FormParam("instructorId") String instructorId,
-            @FormParam("date") String dateString)
+            @FormParam("date") String dateString,
+            @FormParam("weekOfYear") Integer weekOfYear,
+            @FormParam("year") Integer year,
+            @FormParam("billingDate") String billingDateString)
     {
         Account account = accountDao.get(accountId);
         Instructor instructor = instructorDao.get(instructorId);
-        //TODO get the weekId and use that to load the correct weeklySchedule
-        //        instructor.getSchedule().getWeeklyScheduleIdMap()
-        //TODO get the lesson from the weeklySchedule
+        LocalDate billingDate = LocalDate.parse(billingDateString);
+        WeekIdentifier weekId = new WeekIdentifier(weekOfYear, year, billingDate);
+        String weeklyScheduleId = instructor.getSchedule().getWeeklyScheduleIdMap().get(weekId);
         
+        WeeklyScheduleDao weeklyScheduleDao = new WeeklyScheduleDao();
+        WeeklySchedule weeklySchedule = weeklyScheduleDao.get(weeklyScheduleId);
+        
+        Lesson lesson = weeklySchedule.findLesson(lessonId);
         LocalDate date = LocalDate.parse(dateString);
-        
-        
-//        account.applyLessonCost(date, lesson, instructor);
+                
+        account.applyLessonCost(date, lesson, instructor);
+        accountDao.update(account);
         
         return Response.ok("Applying lesson cost was successful!").build();
     } 

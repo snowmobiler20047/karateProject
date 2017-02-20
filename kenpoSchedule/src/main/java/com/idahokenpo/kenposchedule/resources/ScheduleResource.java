@@ -2,8 +2,6 @@ package com.idahokenpo.kenposchedule.resources;
 
 import com.google.gson.Gson;
 import com.idahokenpo.kenposchedule.Controller;
-import com.idahokenpo.kenposchedule.dao.DataLoader;
-import com.idahokenpo.kenposchedule.dao.InstructorDao;
 import com.idahokenpo.kenposchedule.dao.WeeklyScheduleDao;
 import com.idahokenpo.kenposchedule.data.WeekIdentifier;
 import com.idahokenpo.kenposchedule.data.WeeklySchedule;
@@ -28,8 +26,7 @@ import javax.ws.rs.core.Response;
 @Api
 public class ScheduleResource 
 {
-    private static final DataLoader loader = new DataLoader();
-    private static final InstructorDao instructorDao = new InstructorDao();
+    private static final WeeklyScheduleDao weeklyScheduleDao = new WeeklyScheduleDao();
     Gson gson = SerializationUtils.getGson();
     
     @GET
@@ -37,8 +34,8 @@ public class ScheduleResource
     @Path("weeklySchedule")
     public Response getWeeklySchedule(@QueryParam("weeklyScheduleId") String weeklyScheduleId)
     {
-        WeeklyScheduleDao dao = new WeeklyScheduleDao();
-        return Response.ok().entity(gson.toJson(dao.get(weeklyScheduleId))).build();
+        
+        return Response.ok().entity(gson.toJson(weeklyScheduleDao.get(weeklyScheduleId))).build();
     }
     
     /**
@@ -60,8 +57,7 @@ public class ScheduleResource
         LocalDate billingDate = LocalDate.parse(billingDateString);
         WeekIdentifier weekId = new WeekIdentifier(weekOfYear, year, billingDate);
                 
-        
-        WeeklySchedule weeklySchedule = controller.getNextWeeklySchedule(instructorId, weekId);
+        WeeklySchedule weeklySchedule = controller.getNextWeeklySchedule(instructorId, weekId);  
         return Response.ok().entity(gson.toJson(weeklySchedule)).build();
     }
     

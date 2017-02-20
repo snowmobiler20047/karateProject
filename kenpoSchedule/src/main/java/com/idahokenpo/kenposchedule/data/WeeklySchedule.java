@@ -20,6 +20,7 @@ public class WeeklySchedule
     private String weeklyScheduleId;
     private WeekIdentifier weekIdentifier;
     private Map<DayOfWeek, NavigableSet<TimeSlot>> dayToTimeslotsMap;
+    private Map<String, Lesson> lessonMap;
     
     public WeeklySchedule()
     {
@@ -56,6 +57,22 @@ public class WeeklySchedule
     {
         NavigableSet<TimeSlot> timeslotSet = dayToTimeslotsMap.get(dayOfWeek);
         timeslotSet.remove(timeslot);
+    }
+    
+    public void addLesson(DayOfWeek dayOfWeek, TimeSlot timeslot, Lesson lesson)
+    {
+//        NavigableSet<TimeSlot> timeslots = dayToTimeslotsMap.get(dayOfWeek);
+//        
+//        for (TimeSlot ts : timeslots)
+//        {
+//            if (ts.equals(timeslot))
+//        }
+//        
+    }
+
+    public Lesson findLesson(String lessonId)
+    {
+        return lessonMap.get(lessonId);
     }
     
 }

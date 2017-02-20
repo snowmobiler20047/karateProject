@@ -35,7 +35,8 @@ public class Controller
         return weeklyScheduleDao.get(nextWeekId);     
     }
     
-    private WeeklySchedule createNextWeeklySchedule(Instructor instructor) {
+    private WeeklySchedule createNextWeeklySchedule(Instructor instructor) 
+    {
         WeeklySchedule weeklySchedule = new WeeklySchedule(instructor.getPermenantSchedule());
         weeklyScheduleDao.insert(weeklySchedule);
         
@@ -56,7 +57,8 @@ public class Controller
         return weeklyScheduleDao.get(prevWeekId); 
     }
     
-    private WeeklySchedule createPrevWeeklySchedule(Instructor instructor) {
+    private WeeklySchedule createPrevWeeklySchedule(Instructor instructor) 
+    {
         WeeklySchedule weeklySchedule = new WeeklySchedule(instructor.getPermenantSchedule());
         weeklyScheduleDao.insert(weeklySchedule);
         
