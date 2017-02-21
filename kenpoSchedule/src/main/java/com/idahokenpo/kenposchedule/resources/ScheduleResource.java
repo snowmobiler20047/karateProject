@@ -106,6 +106,6 @@ public class ScheduleResource
         weeklySchedule.addTimeSlot(day, timeSlot);
         weeklyScheduleDao.update(weeklySchedule);
         
-        return Response.ok().build();
+        return Response.ok("TimeSlot added!").build();
     }
 }
