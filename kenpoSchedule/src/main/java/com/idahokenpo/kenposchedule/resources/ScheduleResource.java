@@ -2,8 +2,11 @@ package com.idahokenpo.kenposchedule.resources;
 
 import com.google.gson.Gson;
 import com.idahokenpo.kenposchedule.Controller;
+import com.idahokenpo.kenposchedule.dao.LessonDao;
 import com.idahokenpo.kenposchedule.dao.WeeklyScheduleDao;
 import com.idahokenpo.kenposchedule.data.KenpoTime;
+import com.idahokenpo.kenposchedule.data.Lesson;
+import com.idahokenpo.kenposchedule.data.LessonType;
 import com.idahokenpo.kenposchedule.data.TimeSlot;
 import com.idahokenpo.kenposchedule.data.WeekIdentifier;
 import com.idahokenpo.kenposchedule.data.WeeklySchedule;
@@ -32,6 +35,7 @@ import javax.ws.rs.core.Response;
 public class ScheduleResource 
 {
     private static final WeeklyScheduleDao weeklyScheduleDao = new WeeklyScheduleDao();
+    private static final LessonDao LESSON_DAO = new LessonDao();
     Gson gson = SerializationUtils.getGson();
     
     @GET
@@ -113,16 +117,42 @@ public class ScheduleResource
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("addLesson")
     public Response addLesson(@FormParam("weeklyScheduleId") String weeklyScheduleId,
-            @FormParam("day") String dayString,
-            @FormParam("timeSlotId") String timeSlotId)
+            @FormParam("day") DayOfWeek day,
+            @FormParam("timeSlotId") String timeSlotId,
+            @FormParam("lessonType") LessonType lessonType,
+            @FormParam("accountId") String accountId)
     {
-        WeeklySchedule weeklySchedule = weeklyScheduleDao.get(weeklyScheduleId);
+        WeeklySchedule weeklySchedule = weeklyScheduleDao.get(weeklyScheduleId);   
+        TimeSlot timeSlot = weeklySchedule.getTimeSlot(day, timeSlotId);
+     
+        Lesson lesson = new Lesson(lessonType);
+        lesson.setAccountId(accountId);
+        timeSlot.setLesson(lesson);
         
-        DayOfWeek day = DayOfWeek.valueOf(dayString);
+        weeklyScheduleDao.update(weeklySchedule);
+        LESSON_DAO.insert(lesson);
         
-        weeklySchedule.getTimeSlot(day, timeSlotId);
+        return Response.ok("Lesson created!").build();
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("addLessonLink")
+    public Response addLessonLink(@FormParam("weeklyScheduleId") String weeklyScheduleId,
+            @FormParam("day") DayOfWeek day,
+            @FormParam("timeSlotId") String timeSlotId,
+            @FormParam("lessonType") LessonType lessonType,
+            @FormParam("accountId") String accountId)
+    {
+        WeeklySchedule weeklySchedule = weeklyScheduleDao.get(weeklyScheduleId);   
+        TimeSlot timeSlot = weeklySchedule.getTimeSlot(day, timeSlotId);
+     
+        Lesson lesson = new Lesson(lessonType);
+        lesson.setAccountId(accountId);
+        timeSlot.setLesson(lesson);
+        
         weeklyScheduleDao.update(weeklySchedule);
         
-        return Response.ok("TimeSlot added!").build();
+        return Response.ok("Lesson created!").build();
     }
 }

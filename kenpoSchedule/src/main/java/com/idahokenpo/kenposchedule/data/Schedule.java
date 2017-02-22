@@ -35,7 +35,7 @@ public class Schedule
 
     public void addPrevWeek(WeeklySchedule weeklySchedule)
     {
-        WeekIdentifier weekId = weeklyScheduleIdMap.lastKey();
+        WeekIdentifier weekId = weeklyScheduleIdMap.firstKey();
         WeekIdentifier nextWeekId = new WeekIdentifier(weekId.getBillingDate().minusWeeks(1));
         
         weeklyScheduleMap.put(nextWeekId, weeklySchedule);

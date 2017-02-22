@@ -35,7 +35,6 @@ public class Lesson
         this.status = LessonStatus.READY;
         this.students = new HashSet<>(lesson.getStudents());
         this.accountId = lesson.getAccountId();
-        this.lessonLink = lesson.getLessonLink();
     }
 
     public boolean addStudent(Student student)
@@ -66,7 +65,7 @@ public class Lesson
         {
             if (first)
             {
-                if (lessonLink != null && !lessonLink.getPrimaryLesson().equals(this))
+                if (lessonLink != null && !lessonLink.getPrimaryLesson().getLessonId().equals(this.getLessonId()))
                 {
                     cost += applyDiscount(instructor.getLessonCost().getCost());
                 } else

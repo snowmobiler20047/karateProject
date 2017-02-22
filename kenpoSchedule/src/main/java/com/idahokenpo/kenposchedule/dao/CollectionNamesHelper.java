@@ -9,7 +9,8 @@ public enum CollectionNamesHelper
     STUDENTS("students", "personId"),
     ACCOUNTS("accounts", "accountId"),
     INSTRUCTORS("instructors", "personId"),
-    WEEKLY_SCHEDULE("weekly-schedule", "weeklyScheduleId");
+    WEEKLY_SCHEDULE("weekly-schedule", "weeklyScheduleId"),
+    LESSON("lesson", "lessonId");
     
     private final String collectionName;
     private final String keyId;

@@ -60,7 +60,8 @@ public class AccountDao extends AbstractDao<Account>
         {
             throw new IllegalArgumentException("Account ID: " + id + " doesn't exist");
         }
-        return gson.fromJson(doc.toJson(), Account.class);}
+        return gson.fromJson(doc.toJson(), Account.class);
+    }
 
     @Override
     public void update(Set<Account> values)

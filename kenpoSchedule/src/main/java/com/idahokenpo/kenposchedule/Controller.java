@@ -15,6 +15,7 @@ public class Controller
 {
     private final InstructorDao instructorDao = new InstructorDao();
     private final WeeklyScheduleDao weeklyScheduleDao = new WeeklyScheduleDao();
+//    private final LessonLinkDao lessonLinkDao = new LessonLinkDao();
 
     public WeeklySchedule createNextWeeklySchedule(String instructorId)
     {
