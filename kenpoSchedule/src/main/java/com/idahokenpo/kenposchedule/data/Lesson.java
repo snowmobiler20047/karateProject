@@ -1,8 +1,10 @@
 package com.idahokenpo.kenposchedule.data;
 
 import com.google.common.collect.Sets;
+import java.util.HashSet;
 import java.util.Set;
 import lombok.Data;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -11,13 +13,30 @@ import lombok.Data;
 @Data
 public class Lesson
 {
-
     private String lessonId;
     private LessonType lessonType;
     private LessonStatus status;
     private Set<Student> students = Sets.newHashSet();
     private String accountId;
     private LessonLink lessonLink;
+
+    public Lesson(LessonType lessonType)
+    {
+        this.lessonId = new ObjectId().toHexString();
+        this.lessonType = lessonType;
+        this.status = LessonStatus.READY;
+    }
+    
+    
+    public Lesson(Lesson lesson)
+    {
+        this.lessonId = lesson.getLessonId();
+        this.lessonType = lesson.getLessonType();
+        this.status = LessonStatus.READY;
+        this.students = new HashSet<>(lesson.getStudents());
+        this.accountId = lesson.getAccountId();
+        this.lessonLink = lesson.getLessonLink();
+    }
 
     public boolean addStudent(Student student)
     {

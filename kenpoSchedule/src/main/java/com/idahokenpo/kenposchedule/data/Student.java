@@ -7,12 +7,13 @@ import org.bson.types.ObjectId;
  * @author Korey
  */
 public class Student extends Person
-{ 
-   private String parentName;
-   
-   public Student()
+{  
+   public Student(String prefix, String firstName, String lastName)
    {
        super.personId = new ObjectId().toHexString();
+       super.prefix = prefix;
+       super.firstName = firstName;
+       super.lastName = lastName;
    }
    public Student(String id)
    {

@@ -45,8 +45,8 @@ public class Test
 
         TimeSlot otherTimeSlot = new TimeSlot(new KenpoTime(KenpoHour.SIX, KenpoMinute.THIRTY, false), new KenpoTime(KenpoHour.SEVEN, KenpoMinute.ZERO, false));
 
-        schedule.getWeeklyScheduleMap().get(new WeekIdentifier()).getDayToTimeslotsMap().get(DayOfWeek.THURSDAY).add(timeSlot);
-        schedule.getWeeklyScheduleMap().get(new WeekIdentifier()).getDayToTimeslotsMap().get(DayOfWeek.THURSDAY).add(otherTimeSlot);
+        schedule.getWeeklyScheduleMap().get(new WeekIdentifier()).getDayToTimeslotsMap().get(DayOfWeek.THURSDAY).put(timeSlot.getId(), timeSlot);
+        schedule.getWeeklyScheduleMap().get(new WeekIdentifier()).getDayToTimeslotsMap().get(DayOfWeek.THURSDAY).put(otherTimeSlot.getId(), otherTimeSlot);
 
         Instructor instructor = new Instructor();
         instructor.setPrefix("Mr");
@@ -55,17 +55,13 @@ public class Test
         instructor.setLessonCost(LessonCost.NORMAL_PRIVATE);
         instructor.setSchedule(schedule);
 
-        Lesson lesson = new Lesson();
-//        lesson.setInstructor(instructor);
-        lesson.setLessonType(LessonType.GROUP);
-        lesson.addStudent(new Student());
+        Lesson lesson = new Lesson(LessonType.GROUP);
+        lesson.addStudent(new Student("Mr.", "Jack", "Sparrow"));
         lesson.setStatus(LessonStatus.READY);
 
-        Lesson lesson2 = new Lesson();
-//        lesson2.setInstructor(instructor);
-        lesson2.setLessonType(LessonType.PRIVATE);
+        Lesson lesson2 = new Lesson(LessonType.PRIVATE);
         lesson2.setStatus(LessonStatus.READY);
-        lesson2.getStudents().add(new Student());
+        lesson2.getStudents().add(new Student("Mrs.", "Jill", "Sparrow"));
 
         timeSlot.setLesson(lesson);
         otherTimeSlot.setLesson(lesson2);
@@ -103,7 +99,7 @@ public class Test
 //        loader.createDatabase();
         StudentDao loader = new StudentDao();
         //loader.deleteStudents();
-        Student student = new Student();
+        Student student = new Student("Mr.", "Jack", "Jumper");
         student.setFirstName("Kat");
         student.setLastName("Dogg");
         student.setRank(BeltRank.SECOND_BLACK);
@@ -157,14 +153,13 @@ public class Test
         TimeSlot otherTimeSlot = new TimeSlot(new KenpoTime(KenpoHour.SIX, KenpoMinute.THIRTY, false), new KenpoTime(KenpoHour.SEVEN, KenpoMinute.ZERO, false));
 
         WeekIdentifier weekId = new WeekIdentifier();
-        schedule.getWeeklyScheduleMap().get(weekId).getDayToTimeslotsMap().get(DayOfWeek.THURSDAY).add(timeSlot);
-        schedule.getWeeklyScheduleMap().get(weekId).getDayToTimeslotsMap().get(DayOfWeek.THURSDAY).add(otherTimeSlot);
+        schedule.getWeeklyScheduleMap().get(weekId).getDayToTimeslotsMap().get(DayOfWeek.THURSDAY).put(timeSlot.getId(), timeSlot);
+        schedule.getWeeklyScheduleMap().get(weekId).getDayToTimeslotsMap().get(DayOfWeek.THURSDAY).put(otherTimeSlot.getId(), otherTimeSlot);
 
         WeeklyScheduleDao scheduleDao = new WeeklyScheduleDao();
         scheduleDao.drop();
         scheduleDao.insert(schedule.getWeeklyScheduleMap().get(weekId));
-        
-        
+               
         Instructor instructor = new Instructor();
         instructor.setPrefix("Ms");
         instructor.setFirstName("First");
@@ -172,17 +167,11 @@ public class Test
         instructor.setLessonCost(LessonCost.NORMAL_PRIVATE);
         instructor.setSchedule(schedule);
 
-        Lesson lesson = new Lesson();
-//        lesson.setInstructor(instructor);
-        lesson.setLessonType(LessonType.GROUP);
-        lesson.addStudent(new Student());
-        lesson.setStatus(LessonStatus.READY);
+        Lesson lesson = new Lesson(LessonType.GROUP);
+        lesson.addStudent(new Student("Mr.", "Jack", "Sparrow"));
 
-        Lesson lesson2 = new Lesson();
-//        lesson2.setInstructor(instructor);
-        lesson2.setLessonType(LessonType.PRIVATE);
-        lesson2.setStatus(LessonStatus.READY);
-        lesson2.getStudents().add(new Student());
+        Lesson lesson2 = new Lesson(LessonType.PRIVATE);
+        lesson2.getStudents().add(new Student("Ms.", "Jane", "Smith"));
 
         timeSlot.setLesson(lesson);
         otherTimeSlot.setLesson(lesson2);
@@ -190,9 +179,5 @@ public class Test
         InstructorDao dao = new InstructorDao();
         dao.clear();
         dao.insertInstructor(instructor);
-        for (Instructor instructor1 : dao.getAll())
-        {
-            System.out.println(instructor1);
-        }
     }
 }

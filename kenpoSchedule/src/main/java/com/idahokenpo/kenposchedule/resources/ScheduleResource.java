@@ -108,4 +108,21 @@ public class ScheduleResource
         
         return Response.ok("TimeSlot added!").build();
     }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("addLesson")
+    public Response addLesson(@FormParam("weeklyScheduleId") String weeklyScheduleId,
+            @FormParam("day") String dayString,
+            @FormParam("timeSlotId") String timeSlotId)
+    {
+        WeeklySchedule weeklySchedule = weeklyScheduleDao.get(weeklyScheduleId);
+        
+        DayOfWeek day = DayOfWeek.valueOf(dayString);
+        
+        weeklySchedule.getTimeSlot(day, timeSlotId);
+        weeklyScheduleDao.update(weeklySchedule);
+        
+        return Response.ok("TimeSlot added!").build();
+    }
 }

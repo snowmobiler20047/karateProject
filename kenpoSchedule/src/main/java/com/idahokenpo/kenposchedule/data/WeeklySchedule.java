@@ -1,12 +1,10 @@
 package com.idahokenpo.kenposchedule.data;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import java.time.DayOfWeek;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.NavigableSet;
 import java.util.TreeMap;
-import java.util.TreeSet;
 import lombok.Data;
 import org.bson.types.ObjectId;
 
@@ -17,11 +15,12 @@ import org.bson.types.ObjectId;
 @Data
 public class WeeklySchedule
 {
+
     private String weeklyScheduleId;
     private WeekIdentifier weekIdentifier;
-    private Map<DayOfWeek, NavigableSet<TimeSlot>> dayToTimeslotsMap;
+    private Map<DayOfWeek, Map<String, TimeSlot>> dayToTimeslotsMap;
     private Map<String, Lesson> lessonMap;
-    
+
     public WeeklySchedule()
     {
         this.weeklyScheduleId = new ObjectId().toHexString();
@@ -29,50 +28,60 @@ public class WeeklySchedule
         dayToTimeslotsMap = Maps.newTreeMap();
         for (DayOfWeek day : DayOfWeek.values())
         {
-            NavigableSet<TimeSlot> timeSlotSet = Sets.newTreeSet();
-            dayToTimeslotsMap.put(day, timeSlotSet);
+            Map<String, TimeSlot> timeSlotMap = new HashMap();
+            dayToTimeslotsMap.put(day, timeSlotMap);
         }
+        this.lessonMap = new HashMap();
     }
-    
+
     public WeeklySchedule(WeeklySchedule referenceSchedule)
     {
         this.weeklyScheduleId = new ObjectId().toHexString();
         this.dayToTimeslotsMap = new TreeMap<>();
-        for (Map.Entry<DayOfWeek, NavigableSet<TimeSlot>> entry : referenceSchedule.getDayToTimeslotsMap().entrySet())
+        for (Map.Entry<DayOfWeek, Map<String, TimeSlot>> entry : referenceSchedule.getDayToTimeslotsMap().entrySet())
         {
-            NavigableSet<TimeSlot> timeSlotSet = new TreeSet(entry.getValue());
-            dayToTimeslotsMap.put(entry.getKey(), timeSlotSet);
-        }  
+            Map<String, TimeSlot> timeSlotMap = new HashMap();
+            for (TimeSlot timeSlot : entry.getValue().values())
+            {
+                TimeSlot newTimeSlot = new TimeSlot(timeSlot);
+                timeSlotMap.put(newTimeSlot.getId(), timeSlot);
+            }
+
+            dayToTimeslotsMap.put(entry.getKey(), timeSlotMap);
+        }
     }
-    
+
     public void addTimeSlot(DayOfWeek dayOfWeek, TimeSlot timeslot)
     {
-        NavigableSet<TimeSlot> timeslotSet = dayToTimeslotsMap.get(dayOfWeek);
-        if (timeslotSet.contains(timeslot))
+        Map<String, TimeSlot> timeSlotMap = dayToTimeslotsMap.get(dayOfWeek);
+        if (timeSlotMap.containsValue(timeslot))
+        {
             throw new IllegalArgumentException("Timeslot already exists");
-        timeslotSet.add(timeslot);
+        }
+        timeSlotMap.put(timeslot.getId(), timeslot);
     }
-    
+
     public void removeTimeSlot(DayOfWeek dayOfWeek, TimeSlot timeslot)
     {
-        NavigableSet<TimeSlot> timeslotSet = dayToTimeslotsMap.get(dayOfWeek);
-        timeslotSet.remove(timeslot);
+        Map<String, TimeSlot> timeSlotMap = dayToTimeslotsMap.get(dayOfWeek);
+        timeSlotMap.remove(timeslot.getId());
     }
-    
-    public void addLesson(DayOfWeek dayOfWeek, TimeSlot timeslot, Lesson lesson)
+
+    public TimeSlot getTimeSlot(DayOfWeek dayOfWeek, String timeSlotId)
     {
-//        NavigableSet<TimeSlot> timeslots = dayToTimeslotsMap.get(dayOfWeek);
-//        
-//        for (TimeSlot ts : timeslots)
-//        {
-//            if (ts.equals(timeslot))
-//        }
-//        
+        Map<String, TimeSlot> timeSlotMap = dayToTimeslotsMap.get(dayOfWeek);
+        return timeSlotMap.get(timeSlotId);
+    }
+
+    public void addLesson(DayOfWeek dayOfWeek, String timeSlotId, Lesson lesson)
+    {
+        Map<String, TimeSlot> timeSlotMap = dayToTimeslotsMap.get(dayOfWeek);
+        timeSlotMap.get(timeSlotId).setLesson(lesson);        
     }
 
     public Lesson findLesson(String lessonId)
     {
         return lessonMap.get(lessonId);
     }
-    
+
 }
