@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.idahokenpo.kenposchedule.data.Instructor;
 import com.idahokenpo.kenposchedule.data.Lesson;
+import com.idahokenpo.kenposchedule.data.LessonLink;
 import java.time.LocalDate;
 import java.util.NavigableMap;
 import java.util.Set;
@@ -22,6 +23,7 @@ public class Account
     private NavigableMap<LocalDate, Balance> balanceHistory;
     private NavigableMap<LocalDate, Set<Payment>> paymentHistory;
     private boolean active;
+    private LessonLink lessonLink;
 
     public Account()
     {
@@ -49,7 +51,7 @@ public class Account
     {
         Balance prevBalance = balanceHistory.lowerEntry(date).getValue();
         
-        Balance balance = new Balance(prevBalance.getBalance() - lesson.calculateCost(instructor), "Lesson", lesson.getLessonId());
+        Balance balance = new Balance(prevBalance.getBalance() - lesson.calculateCost(instructor, lessonLink), "Lesson", lesson.getLessonId());
          
         balanceHistory.put(date, balance);
     }

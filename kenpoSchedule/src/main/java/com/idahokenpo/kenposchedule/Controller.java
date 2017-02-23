@@ -1,10 +1,14 @@
 package com.idahokenpo.kenposchedule;
 
 import com.idahokenpo.kenposchedule.dao.InstructorDao;
+import com.idahokenpo.kenposchedule.dao.LessonDao;
 import com.idahokenpo.kenposchedule.dao.WeeklyScheduleDao;
 import com.idahokenpo.kenposchedule.data.Instructor;
+import com.idahokenpo.kenposchedule.data.Lesson;
+import com.idahokenpo.kenposchedule.data.LessonType;
 import com.idahokenpo.kenposchedule.data.WeekIdentifier;
 import com.idahokenpo.kenposchedule.data.WeeklySchedule;
+import java.time.DayOfWeek;
 import java.util.NavigableMap;
 
 /**
@@ -15,7 +19,7 @@ public class Controller
 {
     private final InstructorDao instructorDao = new InstructorDao();
     private final WeeklyScheduleDao weeklyScheduleDao = new WeeklyScheduleDao();
-//    private final LessonLinkDao lessonLinkDao = new LessonLinkDao();
+    private final LessonDao lessonDao = new LessonDao();
 
     public WeeklySchedule createNextWeeklySchedule(String instructorId)
     {
@@ -66,5 +70,23 @@ public class Controller
         instructor.getSchedule().addPrevWeek(weeklySchedule);
         instructorDao.update(instructor);
         return weeklySchedule;
+    }
+    
+    public void addLesson(String weeklyScheduleId, DayOfWeek day, String timeSlotId, LessonType lessonType, String accountId)
+    {
+        WeeklySchedule weeklySchedule = weeklyScheduleDao.get(weeklyScheduleId);   
+     
+        Lesson lesson = new Lesson(lessonType);
+        lesson.setAccountId(accountId);
+        weeklySchedule.addLesson(day, timeSlotId, lesson);
+        
+        weeklyScheduleDao.update(weeklySchedule);
+        lessonDao.insert(lesson);
+    }
+    
+    public void removeLesson(String weeklyScheduleId, String lessonId)
+    {
+        WeeklySchedule weeklySchedule = weeklyScheduleDao.get(weeklyScheduleId);
+        weeklySchedule.removeLesson(lessonId);
     }
 }

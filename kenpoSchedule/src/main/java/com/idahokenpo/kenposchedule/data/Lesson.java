@@ -18,7 +18,6 @@ public class Lesson
     private LessonStatus status;
     private Set<Student> students = Sets.newHashSet();
     private String accountId;
-    private LessonLink lessonLink;
 
     public Lesson(LessonType lessonType)
     {
@@ -47,7 +46,7 @@ public class Lesson
         return students.remove(student);
     }
 
-    public double calculateCost(Instructor instructor)
+    public double calculateCost(Instructor instructor, LessonLink lessonLink)
     {
         if (students == null || students.isEmpty())
         {

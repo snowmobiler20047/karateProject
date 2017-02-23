@@ -19,7 +19,6 @@ public class WeeklySchedule
     private String weeklyScheduleId;
     private WeekIdentifier weekIdentifier;
     private Map<DayOfWeek, Map<String, TimeSlot>> dayToTimeslotsMap;
-    private Map<String, Lesson> lessonMap;
 
     public WeeklySchedule()
     {
@@ -31,7 +30,6 @@ public class WeeklySchedule
             Map<String, TimeSlot> timeSlotMap = new HashMap();
             dayToTimeslotsMap.put(day, timeSlotMap);
         }
-        this.lessonMap = new HashMap();
     }
 
     public WeeklySchedule(WeeklySchedule referenceSchedule)
@@ -76,12 +74,45 @@ public class WeeklySchedule
     public void addLesson(DayOfWeek dayOfWeek, String timeSlotId, Lesson lesson)
     {
         Map<String, TimeSlot> timeSlotMap = dayToTimeslotsMap.get(dayOfWeek);
-        timeSlotMap.get(timeSlotId).setLesson(lesson);        
+        timeSlotMap.get(timeSlotId).setLesson(lesson);
     }
 
     public Lesson findLesson(String lessonId)
     {
-        return lessonMap.get(lessonId);
+        for (Map<String, TimeSlot> timeSlotMap : dayToTimeslotsMap.values())
+        {
+            for (TimeSlot timeSlot : timeSlotMap.values())
+            {
+                Lesson lesson = timeSlot.getLesson();
+                if (lesson != null)
+                {
+                    if (lesson.getLessonId().equals(lessonId))
+                    {
+                        return lesson;
+                    }
+                }
+            }
+        }
+        throw new IllegalArgumentException("LessonId: " + lessonId + " does not exist in weekly schedule.");
+    }
+
+    public void removeLesson(String lessonId)
+    {
+        for (Map<String, TimeSlot> timeSlotMap : dayToTimeslotsMap.values())
+        {
+            for (TimeSlot timeSlot : timeSlotMap.values())
+            {
+                Lesson lesson = timeSlot.getLesson();
+                if (lesson != null)
+                {
+                    if (lesson.getLessonId().equals(lessonId))
+                    {
+                        timeSlot.setLesson(null);
+                    }
+
+                }
+            }
+        }
     }
 
 }
