@@ -96,7 +96,7 @@ public class WeeklySchedule
         throw new IllegalArgumentException("LessonId: " + lessonId + " does not exist in weekly schedule.");
     }
 
-    public void removeLesson(String lessonId)
+    public Lesson removeLesson(String lessonId)
     {
         for (Map<String, TimeSlot> timeSlotMap : dayToTimeslotsMap.values())
         {
@@ -108,11 +108,13 @@ public class WeeklySchedule
                     if (lesson.getLessonId().equals(lessonId))
                     {
                         timeSlot.setLesson(null);
+                        return lesson;
                     }
 
                 }
             }
         }
+        return null;
     }
 
 }

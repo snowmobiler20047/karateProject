@@ -84,9 +84,9 @@ public class Controller
         lessonDao.insert(lesson);
     }
     
-    public void removeLesson(String weeklyScheduleId, String lessonId)
+    public Lesson removeLesson(String weeklyScheduleId, String lessonId)
     {
         WeeklySchedule weeklySchedule = weeklyScheduleDao.get(weeklyScheduleId);
-        weeklySchedule.removeLesson(lessonId);
+        return weeklySchedule.removeLesson(lessonId);
     }
 }
