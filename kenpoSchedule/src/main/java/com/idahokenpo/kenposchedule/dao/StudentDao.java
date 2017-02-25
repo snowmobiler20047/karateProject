@@ -1,74 +1,51 @@
 package com.idahokenpo.kenposchedule.dao;
 
-import com.google.common.collect.Lists;
-import com.google.gson.Gson;
 import com.idahokenpo.kenposchedule.data.Student;
-import com.idahokenpo.kenposchedule.data.serialization.SerializationUtils;
-import com.idahokenpo.kenposchedule.utils.DatabaseUtils;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import static com.mongodb.client.model.Filters.eq;
 import java.util.List;
-import org.bson.Document;
+import java.util.Set;
 
 /**
  *
  * @author Korey
  */
-public class StudentDao
+public class StudentDao extends AbstractDao<Student>
 {
-    private final MongoDatabase database = DatabaseUtils.getDatabase();
     private final MongoCollection collection = database.getCollection(CollectionNamesHelper.STUDENTS.getCollectionName());
-    private final Gson gson = SerializationUtils.getGson();
 
-    public List<Student> getStudents()
+    @Override
+    protected MongoCollection getCollection()
     {
-        List<Student> students = Lists.newArrayList();
-        for (Object object : collection.find())
-        {
-            Document doc = (Document) object;
-            Student student = gson.fromJson(doc.toJson(), Student.class);
-            students.add(student);
-        }
-
-        return students;
+        return collection;
     }
 
-    public Student getStudent(String studentId)
+    @Override
+    public List<Student> getAll()
     {
-        Document doc = (Document) collection.find(eq(CollectionNamesHelper.STUDENTS.getKeyId(), studentId)).first();
-        if (doc == null)
-        {
-            throw new IllegalArgumentException("Student ID: " + studentId + " doesn't exist");
-        }
-        return gson.fromJson(doc.toJson(), Student.class);
+        return super.getAll(Student.class);
     }
 
-    public void insertStudent(Student student)
+    @Override
+    public List<Student> get(Set<String> ids)
     {
-        String json = gson.toJson(student);
-        collection.insertOne(Document.parse(json));
+        return super.get(CollectionNamesHelper.STUDENTS.getKeyId(), ids, Student.class);
     }
 
-    public void updateStudent(Student student)
+    @Override
+    public Student get(String id)
     {
-        String json = gson.toJson(student);
-//        System.out.println(json);
-
-        collection.replaceOne(eq(CollectionNamesHelper.STUDENTS.getKeyId(), student.getPersonId()), Document.parse(json));
+        return super.get(CollectionNamesHelper.STUDENTS.getKeyId(), id, Student.class);
     }
 
-    /**
-     * Probably shouldn't leave this here forever It will drop the students
-     * collection in mongodb :(
-     */
-    public void deleteStudents()
+    @Override
+    public void update(Set<Student> values)
     {
-        collection.drop();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void deleteStudent(Student student)
+    @Override
+    public void update(Student value)
     {
-        collection.deleteOne(eq(CollectionNamesHelper.STUDENTS.getKeyId(), student.getPersonId()));
+        super.update(CollectionNamesHelper.STUDENTS.getKeyId(), value.getPersonId(), value);
     }
 }

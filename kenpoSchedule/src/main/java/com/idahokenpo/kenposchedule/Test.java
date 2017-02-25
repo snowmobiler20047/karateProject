@@ -112,7 +112,7 @@ public class Test
 //        student2.setLastName("changedLastname");
 //        System.out.println("Update " + student2);
 //        loader.updateStudent(student2);
-        for (Student s : loader.getStudents())
+        for (Student s : loader.getAll())
         {
             System.out.println(s);
         }
