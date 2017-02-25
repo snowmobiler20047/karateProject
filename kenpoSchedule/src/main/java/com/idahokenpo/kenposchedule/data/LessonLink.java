@@ -58,15 +58,15 @@ public class LessonLink
         loaded = true;
     }
     
-    public class LessonLinkBuilder
+    public static class LessonLinkBuilder
     {
         private final String primaryLessonId;
         private final Set<String> additionalLessonIds;
 
-        public LessonLinkBuilder(String primaryLessonId, String additionalLessonId)
+        public LessonLinkBuilder(String primaryLessonId)
         {
             this.primaryLessonId = primaryLessonId;
-            this.additionalLessonIds = Sets.newHashSet(additionalLessonId);
+            this.additionalLessonIds = Sets.newHashSet();
         }
         
         public LessonLink build()
@@ -77,6 +77,12 @@ public class LessonLink
         public LessonLinkBuilder withAdditionalLesson(String lessonId)
         {
             this.additionalLessonIds.add(lessonId);
+            return this;
+        }
+        
+        public LessonLinkBuilder withAdditionalLessons(Set<String> ids)
+        {
+            additionalLessonIds.addAll(ids);
             return this;
         }
     }

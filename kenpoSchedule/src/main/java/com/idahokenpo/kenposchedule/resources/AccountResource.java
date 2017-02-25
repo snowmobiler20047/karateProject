@@ -8,12 +8,15 @@ import com.idahokenpo.kenposchedule.dao.InstructorDao;
 import com.idahokenpo.kenposchedule.dao.WeeklyScheduleDao;
 import com.idahokenpo.kenposchedule.data.Instructor;
 import com.idahokenpo.kenposchedule.data.Lesson;
+import com.idahokenpo.kenposchedule.data.LessonLink;
+import com.idahokenpo.kenposchedule.data.LessonLink.LessonLinkBuilder;
 import com.idahokenpo.kenposchedule.data.WeekIdentifier;
 import com.idahokenpo.kenposchedule.data.WeeklySchedule;
 import com.idahokenpo.kenposchedule.data.serialization.SerializationUtils;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -86,8 +89,6 @@ public class AccountResource
 
         accountDao.update(account);
     }
-    
-    
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -111,7 +112,7 @@ public class AccountResource
 
         return Response.ok("Payment was successful!").build();
     }
-    
+
 //    @POST
 //    @Consumes(MediaType.APPLICATION_JSON)
 //    @Produces(MediaType.APPLICATION_JSON)
@@ -163,7 +164,6 @@ public class AccountResource
 //
 //        return Response.ok("Update of payment was successful!").build();
 //    }
-
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -192,5 +192,25 @@ public class AccountResource
         accountDao.update(account);
 
         return Response.ok("Applying lesson cost was successful!").build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("createLessonLink")
+    public Response createLessonLink(@FormParam("accountId") String accountId,
+            @FormParam("primaryLessonId") String primaryLessonId,
+            @FormParam("lessonId") Set<String> lessonIds)
+    {
+        Account account = accountDao.get(accountId);
+
+        LessonLinkBuilder builder = new LessonLink.LessonLinkBuilder(primaryLessonId);
+        builder.withAdditionalLessons(lessonIds);
+
+        LessonLink lessonLink = builder.build();
+
+        account.setLessonLink(lessonLink);
+        accountDao.update(account);
+        
+        return Response.ok().build();
     }
 }

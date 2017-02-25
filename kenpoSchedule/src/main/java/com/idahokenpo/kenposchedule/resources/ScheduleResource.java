@@ -127,6 +127,18 @@ public class ScheduleResource
     }
     
     
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("addStudent")
+    public Response addStudent(@FormParam("weeklyScheduleId") String weeklyScheduleId,
+            @FormParam("lessonId") String lessonId,
+            @FormParam("studentId") String studentId)
+    {
+        controller.addStudent(weeklyScheduleId,lessonId, studentId);
+        
+        return Response.ok("Student was added to lesson!").build();
+    }
+    
 //    More of a billing sort of a thing
 //    @POST
 //    @Consumes(MediaType.APPLICATION_JSON)
