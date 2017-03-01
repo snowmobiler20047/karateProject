@@ -14,7 +14,9 @@ public class Student extends Person
        super.prefix = prefix;
        super.firstName = firstName;
        super.lastName = lastName;
+       super.active = true;
    }
+   
    public Student(String id)
    {
        super.personId = id;
