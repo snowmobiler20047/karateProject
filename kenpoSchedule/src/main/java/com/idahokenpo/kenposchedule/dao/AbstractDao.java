@@ -39,7 +39,7 @@ public abstract class AbstractDao<T>
         getCollection().drop();
     }
     
-    public List<T> getAll(Class<T> c)
+    protected List<T> getAll(Class<T> c)
     {
         List<T> list = new ArrayList();
         for (Object object : getCollection().find())
@@ -51,7 +51,7 @@ public abstract class AbstractDao<T>
         return list;
     }
     
-    public List<T> get(String keyId, Set<String> ids, Class<T> clazz)
+    protected List<T> get(String keyId, Set<String> ids, Class<T> clazz)
     {
         List<T> values = new ArrayList();
         FindIterable iterable = getCollection().find(Filters.in(keyId, ids));
@@ -63,7 +63,7 @@ public abstract class AbstractDao<T>
         return values;
     }
     
-    public T get(String keyField, String id, Class<T> clazz)
+    protected T get(String keyField, String id, Class<T> clazz)
     {
         Document doc = (Document) getCollection().find(eq(keyField, id)).first();
         if (doc == null)
@@ -73,7 +73,7 @@ public abstract class AbstractDao<T>
         return gson.fromJson(doc.toJson(), clazz);
     }
     
-    public void update(String keyId, String id, T value)
+    protected void update(String keyId, String id, T value)
     {
         String json = gson.toJson(value);
 

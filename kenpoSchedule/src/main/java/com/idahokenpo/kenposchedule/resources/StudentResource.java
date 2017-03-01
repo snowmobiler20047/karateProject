@@ -65,4 +65,33 @@ public class StudentResource
 
         return Response.ok().entity(gson.toJson(student)).build();
     }
+    
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("edit")
+    public Response editStudent(@FormParam("studentId") String studentId,
+            @FormParam("prefix") String prefix,
+            @FormParam("firstName") String firstName,
+            @FormParam("middleName") String middleName,
+            @FormParam("lastName") String lastName,
+            @FormParam("email") String email,
+            @FormParam("address") String address,
+            @FormParam("lessonCost") String lessonCost,
+            @FormParam("phoneNumber") String phoneNumber,
+            @FormParam("active") boolean active)
+    {
+        Student student = studentDao.get(studentId);
+        student.setPrefix(prefix);
+        student.setFirstName(firstName);
+        student.setLastName(lastName);
+        student.setMiddleName(middleName);
+        student.setEmail(email);
+        student.setAddress(address);
+        student.setPhoneNumber(phoneNumber);
+        student.setActive(active);
+
+        studentDao.update(student);
+
+        return Response.ok().entity(gson.toJson(student)).build();
+    }
 }
