@@ -151,4 +151,19 @@ public class ScheduleResource
 //        
 //        return Response.ok("Lesson created!").build();
 //    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("reschedule")
+    public Response rescheduleLesson(@FormParam("removeFromWeeklyScheduleId") String removeFromWeeklyScheduleId,
+            @FormParam("lessonId") String lessonId,
+            @FormParam("addToWeeklyScheduleId") String addToWeeklyScheduleId,
+            @FormParam("day") DayOfWeek day,
+            @FormParam("timeslotId") String timeslotId)
+    {
+        controller.rescheduleLesson(removeFromWeeklyScheduleId, lessonId, addToWeeklyScheduleId, day, timeslotId);
+        
+        return Response.ok("Lesson was rescheduled").build();
+    }
 }

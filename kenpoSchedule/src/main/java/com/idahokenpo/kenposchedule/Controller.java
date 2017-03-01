@@ -87,6 +87,15 @@ public class Controller
         weeklyScheduleDao.update(weeklySchedule);
         lessonDao.insert(lesson);
     }
+    
+    public void addLesson(String weeklyScheduleId, DayOfWeek day, String timeSlotId, Lesson lesson)
+    {
+        WeeklySchedule weeklySchedule = weeklyScheduleDao.get(weeklyScheduleId);
+        
+        weeklySchedule.addLesson(day, timeSlotId, lesson);
+
+        weeklyScheduleDao.update(weeklySchedule);
+    }
 
     public Lesson removeLesson(String weeklyScheduleId, String lessonId)
     {
@@ -112,5 +121,12 @@ public class Controller
         Student student = studentDao.get(studentId);
 
         return lesson.removeStudent(student);
+    }
+    
+    public void rescheduleLesson(String removeFromWeeklyScheduleId, String lessonId, String addToWeeklyScheduleId, DayOfWeek day, String timeSlotId)
+    {
+        Lesson lesson = removeLesson(removeFromWeeklyScheduleId, lessonId);
+        
+        addLesson(addToWeeklyScheduleId, day, timeSlotId, lesson);
     }
 }
