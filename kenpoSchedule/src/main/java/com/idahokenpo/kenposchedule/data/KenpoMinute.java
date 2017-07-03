@@ -27,4 +27,14 @@ public enum KenpoMinute
     {
         return minuteNum;
     }
+    
+    public static KenpoMinute fromString(String s)
+    {
+        for (KenpoMinute value : values())
+        {
+            if (value.getDisplayValue().equals(s))
+                return value;
+        }
+        throw new IllegalArgumentException(s + " is not a valid input");
+    }
 }

@@ -9,15 +9,16 @@ import lombok.Data;
 @Data
 public abstract class Person
 {
-   private int id;
-   private String prefix;
-   private String firstName;
-   private String middleName;
-   private String lastName;
-   private String phoneNumber;
-   private String address;
-   private String email;
-   private BeltRank rank;
+   protected String personId;
+   protected String prefix;
+   protected String firstName;
+   protected String middleName;
+   protected String lastName;
+   protected String phoneNumber;
+   protected String address;
+   protected String email;
+   protected boolean active;
+   protected BeltRank rank;
    
    public String getNickname()
    {

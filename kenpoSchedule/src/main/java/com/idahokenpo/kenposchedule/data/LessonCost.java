@@ -8,7 +8,9 @@ public enum LessonCost
 {
     NORMAL_PRIVATE(27.00d, PaymentFrequency.WEEKLY),
     PREMIUM_PRIVATE(32.00d, PaymentFrequency.WEEKLY),
-    GROUP_ONLY(50.00d, PaymentFrequency.MONTHLY);
+    GROUP_ONLY(50.00d, PaymentFrequency.MONTHLY),
+    MIGHTY_DRAGONS(48.00d, PaymentFrequency.MONTHLY),
+    ADDITIONAL_STUDENT(5.00d, PaymentFrequency.WEEKLY);
     
     private final double cost;
     private final PaymentFrequency frequency;

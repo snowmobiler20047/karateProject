@@ -1,15 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.idahokenpo.kenposchedule.data;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import java.time.DayOfWeek;
-import java.util.Map;
-import java.util.NavigableSet;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 import lombok.Data;
 
 /**
@@ -19,17 +11,35 @@ import lombok.Data;
 @Data
 public class Schedule
 {
-    private final Map<DayOfWeek, NavigableSet<TimeSlot>> dayToTimeslotMap;
-
+    transient private NavigableMap<WeekIdentifier, WeeklySchedule> weeklyScheduleMap;
+    private NavigableMap<WeekIdentifier, String> weeklyScheduleIdMap;
+    
     public Schedule()
     {
-        dayToTimeslotMap = Maps.newTreeMap();
-        for (DayOfWeek day : DayOfWeek.values())
-        {
-            NavigableSet<TimeSlot> timeSlotSet = Sets.newTreeSet();
-            dayToTimeslotMap.put(day, timeSlotSet);
-        }
+        weeklyScheduleMap = new TreeMap();
+        weeklyScheduleIdMap = new TreeMap();
+        WeekIdentifier weekId = new WeekIdentifier();
+        WeeklySchedule weeklySchedule = new WeeklySchedule();
+        weeklyScheduleMap.put(weekId, weeklySchedule);
+        weeklyScheduleIdMap.put(weekId, weeklySchedule.getWeeklyScheduleId());                
     }
-    
+
+    public void addNextWeek(WeeklySchedule weeklySchedule)
+    {
+        WeekIdentifier weekId = weeklyScheduleIdMap.lastKey();
+        WeekIdentifier nextWeekId = new WeekIdentifier(weekId.getBillingDate().plusWeeks(1));
+        
+        weeklyScheduleMap.put(nextWeekId, weeklySchedule);
+        weeklyScheduleIdMap.put(nextWeekId, weeklySchedule.getWeeklyScheduleId());
+    }
+
+    public void addPrevWeek(WeeklySchedule weeklySchedule)
+    {
+        WeekIdentifier weekId = weeklyScheduleIdMap.firstKey();
+        WeekIdentifier nextWeekId = new WeekIdentifier(weekId.getBillingDate().minusWeeks(1));
+        
+        weeklyScheduleMap.put(nextWeekId, weeklySchedule);
+        weeklyScheduleIdMap.put(nextWeekId, weeklySchedule.getWeeklyScheduleId());
+    }
     
 }
