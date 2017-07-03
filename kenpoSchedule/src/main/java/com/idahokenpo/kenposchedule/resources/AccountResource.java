@@ -62,10 +62,9 @@ public class AccountResource
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("create")
-    public void createAccount(@FormParam("name") String name)
+    public void createAccount(@FormParam("accountName") String accountName)
     {
-        Account account = new Account();
-        account.setActive(true);
+        Account account = new Account(accountName);
 
         accountDao.insert(account);
     }

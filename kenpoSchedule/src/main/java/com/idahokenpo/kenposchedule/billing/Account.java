@@ -25,11 +25,13 @@ public class Account
     private boolean active;
     private LessonLink lessonLink;
 
-    public Account()
+    public Account(String name)
     {
         this.accountId = new ObjectId().toHexString();
         this.balanceHistory = Maps.newTreeMap();
         this.paymentHistory = Maps.newTreeMap();
+	this.active = true;
+	this.name = name;
     }
     
     public void applyPayment(Payment payment)
