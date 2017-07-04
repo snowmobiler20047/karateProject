@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -54,54 +55,78 @@ public class AccountResource
     @Path("getAccounts")
     public Response getAccounts()
     {
+        List<Account> accounts = accountDao.getAll().stream().filter(a -> a.isActive() == true).collect(Collectors.toList());
+
+        return Response.ok(gson.toJson(accounts)).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("getAllAccounts")
+    public Response getAllAccounts()
+    {
         List<Account> accounts = accountDao.getAll();
 
         return Response.ok(gson.toJson(accounts)).build();
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Path("create")
-    public void createAccount(@FormParam("accountName") String accountName)
+    public Response createAccount(@FormParam("accountName") String accountName)
     {
         Account account = new Account(accountName);
 
         accountDao.insert(account);
+	
+	return Response.ok("Successfully created account: " + accountName).build();
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("create")
+    public Response createAccountJson(String accountName)
+    {
+        Account account = new Account(accountName);
+
+        accountDao.insert(account);
+	
+	return Response.ok("Successfully created account: " + accountName).build();
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Path("edit")
-    public void editAccount(@FormParam("name") String accountId,
-            @FormParam("name") String name,
-            @FormParam("name") Boolean active)
+    public Response editAccount(@FormParam("accountId") String accountId,
+            @FormParam("accountName") String accountName,
+            @FormParam("active") Boolean active)
     {
         Account account = accountDao.get(accountId);
-        if (name != null)
+        if (accountName != null && !accountName.equals(account.getName()))
         {
-            account.setName(name);
+            account.setName(accountName);
         }
-        if (active != null)
+        if (active != null && active != account.isActive())
         {
             account.setActive(active);
         }
 
         accountDao.update(account);
+	
+	return Response.ok(gson.toJson(account)).build();
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Path("applyPayment")
     public Response applyPayment(@FormParam("accountId") String accountId,
             @FormParam("amount") Double amount,
-            @FormParam("date") String dateString,
-            @FormParam("time") String timeString)
+            @FormParam("date") String dateString)
     {
         Account account = accountDao.get(accountId);
 
         LocalDate date = LocalDate.parse(dateString);
-        LocalTime time = LocalTime.parse(timeString);
+        LocalTime time = LocalTime.now();
 
         Payment payment = new Payment(amount, date, time);
 
@@ -112,59 +137,52 @@ public class AccountResource
         return Response.ok("Payment was successful!").build();
     }
 
-//    @POST
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("editPayment")
-//    public Response editPayment(@FormParam("accountId") String accountId,
-//            @FormParam("paymentId") String paymentId,
-//            @FormParam("amount") Double amount,
-//            @FormParam("date") String dateString,
-//            @FormParam("time") String timeString)
-//    {
-//        Account account = accountDao.get(accountId);
-//        
-//        Payment payment = null;
-//        for (Set<Payment> payments : account.getPaymentHistory().values())
-//        {
-//            for (Payment p : payments)
-//            {
-//                if (p.getPaymentId().equals(paymentId))
-//                {   
-//                    payment = p;
-//                    payments.remove(p);
-//                    break;
-//                }
-//            }
-//        }
-//        
-//        if (payment == null)
-//            return Response.notModified().build();
-//        
-//        if (dateString != null)
-//        {
-//            LocalDate date = LocalDate.parse(dateString);
-//            payment.setDate(date);
-//        }
-//        if (timeString != null)
-//        {
-//            LocalTime time = LocalTime.parse(timeString);
-//            payment.setTime(time);
-//        }
-//        
-//        if (amount != null) 
-//        {
-//            payment.setAmount(amount);
-//        }
-//
-//        account.applyPayment(payment);
-//
-//        accountDao.update(account);
-//
-//        return Response.ok("Update of payment was successful!").build();
-//    }
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Path("editPayment")
+    public Response editPayment(@FormParam("accountId") String accountId,
+            @FormParam("paymentId") String paymentId,
+            @FormParam("amount") Double amount,
+            @FormParam("date") String dateString)
+    {
+        Account account = accountDao.get(accountId);
+        
+        Payment payment = null;
+        for (Set<Payment> payments : account.getPaymentHistory().values())
+        {
+            for (Payment p : payments)
+            {
+                if (p.getPaymentId().equals(paymentId))
+                {   
+                    payment = p;
+                    payments.remove(p);
+                    break;
+                }
+            }
+        }
+        
+        if (payment == null)
+            return Response.notModified("No payment with paymentId: " + paymentId).build();
+        
+        if (dateString != null)
+        {
+            LocalDate date = LocalDate.parse(dateString);
+            payment.setDate(date);
+        }
+        
+        if (amount != null) 
+        {
+            payment.setAmount(amount);
+        }
+	//TODO need to adjust the balance to match
+        account.applyPayment(payment);
+
+        accountDao.update(account);
+
+        return Response.ok("Update of payment was successful!").build();
+    }
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("applyLessonCost")
     public Response applyLessonCost(@FormParam("accountId") String accountId,
@@ -194,7 +212,7 @@ public class AccountResource
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Path("createLessonLink")
     public Response createLessonLink(@FormParam("accountId") String accountId,
             @FormParam("primaryLessonId") String primaryLessonId,

@@ -10,6 +10,7 @@ com\idahokenpo\kenposchedule\data\KenpoTime.class
 com\idahokenpo\kenposchedule\Test.class
 com\idahokenpo\kenposchedule\dao\StudentDao.class
 com\idahokenpo\kenposchedule\data\Student.class
+com\idahokenpo\kenposchedule\billing\BillingUtils.class
 com\idahokenpo\kenposchedule\billing\AccountStatus.class
 com\idahokenpo\kenposchedule\resources\InstructorResource.class
 com\idahokenpo\kenposchedule\resources\StudentResource.class

@@ -19,7 +19,12 @@ public class Payment
     
     public Payment(double amount, LocalDate date, LocalTime time)
     {
-        this.paymentId = new ObjectId().toHexString();
+	this(new ObjectId().toHexString(), amount, date, time);
+    }
+    
+    public Payment(String paymentId, double amount, LocalDate date, LocalTime time)
+    {
+        this.paymentId = paymentId;
         this.amount = amount;
         this.date = date;
         this.time = time;
