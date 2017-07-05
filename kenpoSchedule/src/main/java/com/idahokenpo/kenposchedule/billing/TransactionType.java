@@ -4,6 +4,5 @@ public enum TransactionType
 {
     PAYMENT,
     LESSON,
-    ADJUSTMENT,
     INITIAL
 }

@@ -4,6 +4,7 @@ import com.idahokenpo.kenposchedule.dao.AccountDao;
 import com.idahokenpo.kenposchedule.data.Instructor;
 import com.idahokenpo.kenposchedule.data.Lesson;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,7 +25,6 @@ public class BillingUtils
     
     public String runReport()
     {
-        LocalDate date = LocalDate.now();
         StringBuilder sb = new StringBuilder();
         for (Account account : dao.getAll())
         {
@@ -36,6 +36,7 @@ public class BillingUtils
          
         return sb.toString();
     }
+    
     public String runReportForAccount(String accountId)
     {
         Account account = dao.get(accountId);
@@ -59,5 +60,33 @@ public class BillingUtils
 	sb.append("Balance: ").append(account.getBalance());
 	
         return sb.toString();
+    }
+    
+    public IncomeReport runIncomeReport(LocalDate startDate, LocalDate endDate)
+    {
+	List<Account> accounts = dao.getAll();
+	double totalIncome = 0d;
+	double lessonCost = 0d;
+	
+	for (Account account : accounts)
+	{
+	    for (Map.Entry<LocalDate, Set<Transaction>> entry : account.getTransactionHistory().subMap(startDate, true, endDate, true).entrySet())
+	    {
+		for (Transaction transaction : entry.getValue())
+		{
+		    switch (transaction.getTransactionType())
+		    {
+			case PAYMENT:
+			    totalIncome += transaction.getAmount();
+			    break;
+			case LESSON:
+			    lessonCost += transaction.getAmount();
+			    break;
+		    }		    
+		}
+	    }
+	}
+	
+	return new IncomeReport(totalIncome, lessonCost, startDate, endDate);
     }
 }
