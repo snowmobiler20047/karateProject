@@ -31,7 +31,6 @@ public class BillingResource
     
     @Path("income")
     @GET
-    
     public Response getIncome(@QueryParam("startDate") String startDateString, @QueryParam("endDate") String endDateString)
     {
 	LocalDate startDate = LocalDate.parse(startDateString);
