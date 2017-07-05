@@ -22,7 +22,7 @@ public class AccountTest
 {
     private Payment payment;
     private Account account;
-    private LocalDate testDate = LocalDate.of(2017, 7, 3);
+    private final LocalDate testDate = LocalDate.of(2017, 7, 3);
     
     public AccountTest()
     {
@@ -60,7 +60,7 @@ public class AccountTest
 
 	account.applyPayment(payment);
 
-	assertEquals(100d, account.getCurrentBalance(testDate), .00001);
+	assertEquals(100d, account.getBalance(), 0.00001);
     }
 
     /**
@@ -71,13 +71,13 @@ public class AccountTest
     {
 	account.applyPayment(payment);
 	
-	assertEquals(100d, account.getCurrentBalance(testDate), .00001);
+	assertEquals(100d, account.getBalance(), 0.00001);
 	
 	Payment editedPayment = new Payment(payment.getId(), 50d, testDate, LocalTime.MIN);
 	
 	account.editPayment(editedPayment);
 	
-	assertEquals("Edited amount", 50d, account.getCurrentBalance(testDate), .00001);
+	assertEquals("Edited amount", 50d, account.getBalance(), 0.00001);
 	assertTrue("Transactions size", account.getTransactionHistory().get(testDate).size() == 1);
     }
 
@@ -122,5 +122,26 @@ public class AccountTest
 	
 	result = account.getAccountStatus(testDate);
 	assertEquals(AccountStatus.GOOD, result);
-    }  
+    } 
+    
+    @Test
+    public void testMultipleTransactions()
+    {
+	LocalDate firstLessonDate = LocalDate.of(2017, 6, 26);
+	Lesson lesson = mock(Lesson.class);
+	when(lesson.getLessonId()).thenReturn("lessonId");
+	when(lesson.calculateCost(Mockito.any(Instructor.class), Mockito.any())).thenReturn(27d);
+	
+	Instructor instructor = mock(Instructor.class);
+	
+	account.applyLessonCost(firstLessonDate, lesson, instructor);
+	
+	account.applyLessonCost(testDate, lesson, instructor);
+	
+	Payment payment = new Payment(100, LocalDate.of(2017, 7, 4), LocalTime.MIN);
+	account.applyPayment(payment);
+	
+	assertEquals("Balance amount", 46d, account.getBalance(), 0.00001);
+	assertTrue("Transaction History size", account.getTransactionHistory().size() == 4); //init, firstLesson, second lesson, payment
+    }
 }

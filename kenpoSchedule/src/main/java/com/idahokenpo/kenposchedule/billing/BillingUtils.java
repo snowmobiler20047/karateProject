@@ -5,6 +5,7 @@ import com.idahokenpo.kenposchedule.data.Instructor;
 import com.idahokenpo.kenposchedule.data.Lesson;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -29,29 +30,33 @@ public class BillingUtils
         {
             sb.append(account.getAccountId()).append("\t");
             sb.append(account.getAccountStatus(date)).append("\t");
-            sb.append(account.getCurrentBalance(date)).append("\t");
+            sb.append(account.getBalance()).append("\t");
         }
          
         return sb.toString();
     }
-//    public String runReportForAccount(String accountId, LocalDate date)
-//    {
-//        Account account = dao.get(accountId);
-//        
-//        StringBuilder sb = new StringBuilder();
-//        sb.append(accountId).append("\t").append(account.getAccountStatus(date)).append("\n");
-//        for (Map.Entry<LocalDate, Balance> balanceEntry : account.getBalanceHistory().entrySet())
-//        {
-//            sb.append(balanceEntry.getKey()).append("\t");
-//            Balance balance = balanceEntry.getValue();
-//            sb.append(balance.getBalance())
-//                    .append("\t")
-//                    .append(balance.getType())
-//                    .append("\t")
-//                    .append(balance.getId())
-//                    .append("\n");
-//        }
-//        
-//        return sb.toString();
-//    }
+    public String runReportForAccount(String accountId, LocalDate date)
+    {
+        Account account = dao.get(accountId);
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append(accountId).append("\t").append(account.getAccountStatus(date)).append("\n");
+	for (Map.Entry<LocalDate, Set<Transaction>> entry : account.getTransactionHistory().entrySet())
+	{
+	    sb.append(entry.getKey()).append("\n\t");
+            for (Transaction transaction : entry.getValue())
+	    {
+		sb.append(transaction.getId())
+                    .append("\t")
+                    .append(transaction.getTransactionType())
+                    .append("\t")
+                    .append(transaction.getAmount())
+                    .append("\n");
+	    }
+            
+	}
+	sb.append("Balance: ").append(account.getBalance());
+	
+        return sb.toString();
+    }
 }

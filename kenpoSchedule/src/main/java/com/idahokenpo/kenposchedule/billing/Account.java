@@ -90,8 +90,6 @@ public class Account
 	this.balance = updatedBalanceAmount;
     }
     
-    
-
     public void applyLessonCost(LocalDate date, Lesson lesson, Instructor instructor)
     {
 	double lessonCost = lesson.calculateCost(instructor, lessonLink);
@@ -111,10 +109,5 @@ public class Account
 	}
 
 	return AccountStatus.GOOD;
-    }
-
-    public double getCurrentBalance(LocalDate date)
-    {
-	return balance;
     }
 }
