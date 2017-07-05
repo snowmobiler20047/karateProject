@@ -24,6 +24,6 @@ public class BillingResource
     public Response getBillingReport(@QueryParam("accountId") String accountId, @QueryParam("date") String dateString)
     {
 	LocalDate date = LocalDate.parse(dateString);
-	return Response.ok(billing.runReportForAccount(accountId, date)).build();
+	return Response.ok().build();//billing.runReportForAccount(accountId, date)).build();
     }
 }

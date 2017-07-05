@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.idahokenpo.kenposchedule.billing;
 
 import com.idahokenpo.kenposchedule.data.Instructor;
@@ -15,6 +10,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  *
@@ -62,68 +60,67 @@ public class AccountTest
 
 	account.applyPayment(payment);
 
-	assertEquals(100d, account.getCurrentBalance(testDate).getBalance(), .00001);
+	assertEquals(100d, account.getCurrentBalance(testDate), .00001);
     }
 
     /**
      * Test of editPayment method, of class Account.
      */
-//    @Test
+    @Test
     public void testEditPayment()
     {
-	System.out.println("editPayment");
-	Payment payment = null;
-	Account instance = null;
-	instance.editPayment(payment);
-	// TODO review the generated test code and remove the default call to fail.
-	fail("The test case is a prototype.");
+	account.applyPayment(payment);
+	
+	assertEquals(100d, account.getCurrentBalance(testDate), .00001);
+	
+	Payment editedPayment = new Payment(payment.getId(), 50d, testDate, LocalTime.MIN);
+	
+	account.editPayment(editedPayment);
+	
+	assertEquals("Edited amount", 50d, account.getCurrentBalance(testDate), .00001);
+	assertTrue("Transactions size", account.getTransactionHistory().get(testDate).size() == 1);
     }
 
     /**
      * Test of applyLessonCost method, of class Account.
      */
-//    @Test
+    @Test
     public void testApplyLessonCost()
     {
 	System.out.println("applyLessonCost");
-	LocalDate date = null;
-	Lesson lesson = null;
-	Instructor instructor = null;
-	Account instance = null;
-	instance.applyLessonCost(date, lesson, instructor);
-	// TODO review the generated test code and remove the default call to fail.
-	fail("The test case is a prototype.");
+	
+	Lesson lesson = mock(Lesson.class);
+	when(lesson.getLessonId()).thenReturn("lessonId");
+	when(lesson.calculateCost(Mockito.any(Instructor.class), Mockito.any())).thenReturn(27d);
+	
+	Instructor instructor = mock(Instructor.class);
+	
+	account.applyLessonCost(testDate, lesson, instructor);
+	
+	assertEquals("Balance", -27d, account.getBalance(), .00001);
+	assertTrue("Transactions size", account.getTransactionHistory().get(testDate).size() == 1);
     }
 
     /**
      * Test of getAccountStatus method, of class Account.
      */
-//    @Test
+    @Test
     public void testGetAccountStatus()
     {
-	System.out.println("getAccountStatus");
-	LocalDate date = null;
-	Account instance = null;
-	AccountStatus expResult = null;
-	AccountStatus result = instance.getAccountStatus(date);
-	assertEquals(expResult, result);
-	// TODO review the generated test code and remove the default call to fail.
-	fail("The test case is a prototype.");
-    }
+	Lesson lesson = mock(Lesson.class);
+	when(lesson.getLessonId()).thenReturn("lessonId");
+	when(lesson.calculateCost(Mockito.any(Instructor.class), Mockito.any())).thenReturn(27d);
+	
+	Instructor instructor = mock(Instructor.class);
+	
+	account.applyLessonCost(testDate, lesson, instructor);
 
-    /**
-     * Test of getCurrentBalance method, of class Account.
-     */
-//    @Test
-    public void testGetCurrentBalance()
-    {
-	System.out.println("getCurrentBalance");
-	LocalDate date = null;
-	Account instance = null;
-	Balance expResult = null;
-	Balance result = instance.getCurrentBalance(date);
-	assertEquals(expResult, result);
-	// TODO review the generated test code and remove the default call to fail.
-	fail("The test case is a prototype.");
-    }   
+	AccountStatus result = account.getAccountStatus(testDate);
+	assertEquals(AccountStatus.PAYMENT_DUE, result);
+	
+	account.applyPayment(payment);
+	
+	result = account.getAccountStatus(testDate);
+	assertEquals(AccountStatus.GOOD, result);
+    }  
 }

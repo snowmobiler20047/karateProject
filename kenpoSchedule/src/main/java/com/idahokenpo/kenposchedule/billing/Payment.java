@@ -10,12 +10,11 @@ import org.bson.types.ObjectId;
  * @author Korey
  */
 @Data
-public class Payment
+public class Payment implements Transaction
 {
     private String paymentId;
     private double amount;
     private LocalDate date;
-    private LocalTime time;
     
     public Payment(double amount, LocalDate date, LocalTime time)
     {
@@ -27,6 +26,17 @@ public class Payment
         this.paymentId = paymentId;
         this.amount = amount;
         this.date = date;
-        this.time = time;
+    }
+
+    @Override
+    public String getId()
+    {
+	return paymentId;
+    }
+    
+    @Override
+    public TransactionType getTransactionType()
+    {
+	return TransactionType.PAYMENT;
     }
 }

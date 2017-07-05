@@ -45,7 +45,8 @@ public class Lesson
     {
         return students.remove(student);
     }
-
+ 
+    //TODO write unit tests
     public double calculateCost(Instructor instructor, LessonLink lessonLink)
     {
         if (students == null || students.isEmpty())

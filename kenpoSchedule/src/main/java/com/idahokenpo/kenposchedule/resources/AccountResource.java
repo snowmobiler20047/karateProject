@@ -147,36 +147,9 @@ public class AccountResource
     {
         Account account = accountDao.get(accountId);
         
-        Payment payment = null;
-        for (Set<Payment> payments : account.getPaymentHistory().values())
-        {
-            for (Payment p : payments)
-            {
-                if (p.getPaymentId().equals(paymentId))
-                {   
-                    payment = p;
-                    payments.remove(p);
-                    break;
-                }
-            }
-        }
+        Payment payment = new Payment(paymentId, amount, LocalDate.parse(dateString), LocalTime.now());
+	account.editPayment(payment);
         
-        if (payment == null)
-            return Response.notModified("No payment with paymentId: " + paymentId).build();
-        
-        if (dateString != null)
-        {
-            LocalDate date = LocalDate.parse(dateString);
-            payment.setDate(date);
-        }
-        
-        if (amount != null) 
-        {
-            payment.setAmount(amount);
-        }
-	//TODO need to adjust the balance to match
-        account.applyPayment(payment);
-
         accountDao.update(account);
 
         return Response.ok("Update of payment was successful!").build();
