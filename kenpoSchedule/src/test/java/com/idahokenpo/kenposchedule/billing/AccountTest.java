@@ -115,12 +115,12 @@ public class AccountTest
 	
 	account.applyLessonCost(testDate, lesson, instructor);
 
-	AccountStatus result = account.getAccountStatus(testDate);
+	AccountStatus result = account.getAccountStatus();
 	assertEquals(AccountStatus.PAYMENT_DUE, result);
 	
 	account.applyPayment(payment);
 	
-	result = account.getAccountStatus(testDate);
+	result = account.getAccountStatus();
 	assertEquals(AccountStatus.GOOD, result);
     } 
     

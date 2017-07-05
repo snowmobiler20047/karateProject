@@ -1,15 +1,25 @@
 package com.idahokenpo.kenposchedule.billing;
 
 import java.time.LocalDate;
+import lombok.Data;
 import org.bson.types.ObjectId;
 
+@Data
 public class InitialTransaction implements Transaction
 {
-    public final String id;
+    private final String id;
+    private final double amount = 0d;
+    private final TransactionType type = TransactionType.INITIAL;
+    private final LocalDate date = LocalDate.MIN;
     
     public InitialTransaction()
     {
-	this.id = new ObjectId().toHexString();
+	this(new ObjectId().toHexString());
+    }
+    
+    public InitialTransaction(String id)
+    {
+	this.id = id;
     }
     
     @Override
@@ -21,18 +31,18 @@ public class InitialTransaction implements Transaction
     @Override
     public double getAmount()
     {
-	return 0d;
+	return amount;
     }
 
     @Override
     public TransactionType getTransactionType()
     {
-	return TransactionType.INITIAL;
+	return type;
     }
 
     @Override
     public LocalDate getDate()
     {
-	return LocalDate.MIN;
+	return date;
     }
 }

@@ -29,18 +29,19 @@ public class BillingUtils
         for (Account account : dao.getAll())
         {
             sb.append(account.getAccountId()).append("\t");
-            sb.append(account.getAccountStatus(date)).append("\t");
+	    sb.append(account.getName()).append("\t");
+            sb.append(account.getAccountStatus()).append("\t");
             sb.append(account.getBalance()).append("\t");
         }
          
         return sb.toString();
     }
-    public String runReportForAccount(String accountId, LocalDate date)
+    public String runReportForAccount(String accountId)
     {
         Account account = dao.get(accountId);
         
         StringBuilder sb = new StringBuilder();
-        sb.append(accountId).append("\t").append(account.getAccountStatus(date)).append("\n");
+        sb.append(accountId).append("\t").append(account.getAccountStatus()).append("\n");
 	for (Map.Entry<LocalDate, Set<Transaction>> entry : account.getTransactionHistory().entrySet())
 	{
 	    sb.append(entry.getKey()).append("\n\t");

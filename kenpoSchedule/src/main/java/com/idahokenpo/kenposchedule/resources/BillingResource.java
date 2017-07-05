@@ -1,7 +1,6 @@
 package com.idahokenpo.kenposchedule.resources;
 
 import com.idahokenpo.kenposchedule.billing.BillingUtils;
-import java.time.LocalDate;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
@@ -21,9 +20,9 @@ public class BillingResource
     
     @Path("run")
     @GET
-    public Response getBillingReport(@QueryParam("accountId") String accountId, @QueryParam("date") String dateString)
+    public Response getBillingReport(@QueryParam("accountId") String accountId)
     {
-	LocalDate date = LocalDate.parse(dateString);
-	return Response.ok().build();//billing.runReportForAccount(accountId, date)).build();
+	
+	return Response.ok(billing.runReportForAccount(accountId)).build();
     }
 }

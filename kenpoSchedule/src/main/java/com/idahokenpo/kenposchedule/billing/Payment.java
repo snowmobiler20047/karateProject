@@ -14,6 +14,7 @@ public class Payment implements Transaction
 {
     private String paymentId;
     private double amount;
+    private final TransactionType type = TransactionType.PAYMENT;
     private LocalDate date;
     
     public Payment(double amount, LocalDate date, LocalTime time)
@@ -37,6 +38,6 @@ public class Payment implements Transaction
     @Override
     public TransactionType getTransactionType()
     {
-	return TransactionType.PAYMENT;
+	return type;
     }
 }

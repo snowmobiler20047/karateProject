@@ -101,7 +101,7 @@ public class Account
 	balance += lessonTran.getAmount();
     }
 
-    public AccountStatus getAccountStatus(LocalDate date)
+    public AccountStatus getAccountStatus()
     {
 	if (balance < 0)
 	{

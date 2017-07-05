@@ -1,6 +1,7 @@
 package com.idahokenpo.kenposchedule;
 
 import com.google.gson.Gson;
+import com.idahokenpo.kenposchedule.dao.AccountDao;
 import com.idahokenpo.kenposchedule.dao.InstructorDao;
 import com.idahokenpo.kenposchedule.dao.StudentDao;
 import com.idahokenpo.kenposchedule.dao.WeeklyScheduleDao;
@@ -31,8 +32,11 @@ public class Test
     {
 //        doTest();
 //        doDatabaseTest();
-        doDatabaseTest2();
+//        doDatabaseTest2();
 //        doBillingTest();
+	
+	AccountDao accountDao = new AccountDao();
+	accountDao.drop();
 
     }
 

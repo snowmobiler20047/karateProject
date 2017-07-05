@@ -75,6 +75,9 @@ public class AccountResource
     @Path("create")
     public Response createAccount(@FormParam("accountName") String accountName)
     {
+	if (accountName == null)
+	    return Response.notModified("AccountName of: " + accountName + " is not valid").build();
+		
         Account account = new Account(accountName);
 
         accountDao.insert(account);

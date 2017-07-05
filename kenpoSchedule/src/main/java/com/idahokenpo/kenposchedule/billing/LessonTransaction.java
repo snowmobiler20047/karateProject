@@ -8,6 +8,7 @@ public class LessonTransaction implements Transaction
 {
     private final String lessonId;
     private double amount;
+    private final TransactionType type = TransactionType.LESSON;
     private LocalDate date;
     
     public LessonTransaction(String lessonId, double amount, LocalDate date)
@@ -32,7 +33,7 @@ public class LessonTransaction implements Transaction
     @Override
     public TransactionType getTransactionType()
     {
-	return TransactionType.LESSON;
+	return type;
     }
 
     @Override
