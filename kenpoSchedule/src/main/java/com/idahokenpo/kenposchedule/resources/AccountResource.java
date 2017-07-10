@@ -45,9 +45,9 @@ public class AccountResource
     @Path("getAccount")
     public Response getAccount(@QueryParam("accountId") String accountId)
     {
-        Account account = accountDao.get(accountId);
+	Account account = accountDao.get(accountId);
 
-        return Response.ok(gson.toJson(account)).build();
+	return Response.ok(gson.toJson(account)).build();
     }
 
     @GET
@@ -55,19 +55,19 @@ public class AccountResource
     @Path("getAccounts")
     public Response getAccounts()
     {
-        List<Account> accounts = accountDao.getAll().stream().filter(a -> a.isActive() == true).collect(Collectors.toList());
+	List<Account> accounts = accountDao.getAll().stream().filter(a -> a.isActive() == true).collect(Collectors.toList());
 
-        return Response.ok(gson.toJson(accounts)).build();
+	return Response.ok(gson.toJson(accounts)).build();
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("getAllAccounts")
     public Response getAllAccounts()
     {
-        List<Account> accounts = accountDao.getAll();
+	List<Account> accounts = accountDao.getAll();
 
-        return Response.ok(gson.toJson(accounts)).build();
+	return Response.ok(gson.toJson(accounts)).build();
     }
 
     @POST
@@ -76,24 +76,26 @@ public class AccountResource
     public Response createAccount(@FormParam("accountName") String accountName)
     {
 	if (accountName == null)
+	{
 	    return Response.notModified("AccountName of: " + accountName + " is not valid").build();
-		
-        Account account = new Account(accountName);
+	}
 
-        accountDao.insert(account);
-	
+	Account account = new Account(accountName);
+
+	accountDao.insert(account);
+
 	return Response.ok("Successfully created account: " + accountName).build();
     }
-    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("create")
     public Response createAccountJson(String accountName)
     {
-        Account account = new Account(accountName);
+	Account account = new Account(accountName);
 
-        accountDao.insert(account);
-	
+	accountDao.insert(account);
+
 	return Response.ok("Successfully created account: " + accountName).build();
     }
 
@@ -101,109 +103,152 @@ public class AccountResource
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Path("edit")
     public Response editAccount(@FormParam("accountId") String accountId,
-            @FormParam("accountName") String accountName,
-            @FormParam("active") Boolean active)
+	    @FormParam("accountName") String accountName,
+	    @FormParam("active") Boolean active)
     {
-        Account account = accountDao.get(accountId);
-        if (accountName != null && !accountName.equals(account.getName()))
-        {
-            account.setName(accountName);
-        }
-        if (active != null && active != account.isActive())
-        {
-            account.setActive(active);
-        }
+	Account account = accountDao.get(accountId);
+	if (accountName != null && !accountName.equals(account.getName()))
+	{
+	    account.setName(accountName);
+	}
+	if (active != null && active != account.isActive())
+	{
+	    account.setActive(active);
+	}
 
-        accountDao.update(account);
-	
+	accountDao.update(account);
+
 	return Response.ok(gson.toJson(account)).build();
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("edit")
+    public Response editAccountJson(String json)
+    {
+	Account jsonAccount = gson.fromJson(json, Account.class);
+	
+	Account account = accountDao.get(jsonAccount.getAccountId());
+	if (jsonAccount.getName() != null && !jsonAccount.getName().equals(account.getName()))
+	{
+	    account.setName(jsonAccount.getName());
+	}
+	if (jsonAccount.isActive() != account.isActive())
+	{
+	    account.setActive(jsonAccount.isActive());
+	}
+
+	accountDao.update(account);
+
+	return Response.ok(gson.toJson(account)).build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Path("deactivate")
+    public Response deactivate(@FormParam("accountId") String accountId)
+    {
+	Account account = accountDao.get(accountId);
+	account.setActive(false);
+	return Response.ok("Deactivated accountId " + accountId).build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Path("delete")
+    public Response delete(@FormParam("accountId") String accountId)
+    {
+	accountDao.delete(accountId);
+	return Response.ok("Deleted accountId " + accountId).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Path("applyPayment")
     public Response applyPayment(@FormParam("accountId") String accountId,
-            @FormParam("amount") Double amount,
-            @FormParam("date") String dateString)
+	    @FormParam("amount") Double amount,
+	    @FormParam("date") String dateString)
     {
-        Account account = accountDao.get(accountId);
+	Account account = accountDao.get(accountId);
 
-        LocalDate date = LocalDate.parse(dateString);
-        LocalTime time = LocalTime.now();
+	LocalDate date = LocalDate.parse(dateString);
+	LocalTime time = LocalTime.now();
 
-        Payment payment = new Payment(amount, date, time);
+	Payment payment = new Payment(amount, date, time);
 
-        account.applyPayment(payment);
+	account.applyPayment(payment);
 
-        accountDao.update(account);
+	accountDao.update(account);
 
-        return Response.ok("Payment was successful!").build();
+	return Response.ok("Payment was successful!").build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Path("editPayment")
     public Response editPayment(@FormParam("accountId") String accountId,
-            @FormParam("paymentId") String paymentId,
-            @FormParam("amount") Double amount,
-            @FormParam("date") String dateString)
+	    @FormParam("paymentId") String paymentId,
+	    @FormParam("amount") Double amount,
+	    @FormParam("date") String dateString)
     {
-        Account account = accountDao.get(accountId);
-        
-        Payment payment = new Payment(paymentId, amount, LocalDate.parse(dateString), LocalTime.now());
-	account.editPayment(payment);
-        
-        accountDao.update(account);
+	Account account = accountDao.get(accountId);
 
-        return Response.ok("Update of payment was successful!").build();
+	Payment payment = new Payment(paymentId, amount, LocalDate.parse(dateString), LocalTime.now());
+	account.editPayment(payment);
+
+	accountDao.update(account);
+
+	return Response.ok("Update of payment was successful!").build();
     }
+    
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("applyLessonCost")
     public Response applyLessonCost(@FormParam("accountId") String accountId,
-            @FormParam("lessonId") String lessonId,
-            @FormParam("instructorId") String instructorId,
-            @FormParam("date") String dateString,
-            @FormParam("weekOfYear") Integer weekOfYear,
-            @FormParam("year") Integer year,
-            @FormParam("billingDate") String billingDateString)
+	    @FormParam("lessonId") String lessonId,
+	    @FormParam("instructorId") String instructorId,
+	    @FormParam("date") String dateString,
+	    @FormParam("weekOfYear") Integer weekOfYear,
+	    @FormParam("year") Integer year,
+	    @FormParam("billingDate") String billingDateString)
     {
-        Account account = accountDao.get(accountId);
-        Instructor instructor = instructorDao.get(instructorId);
-        LocalDate billingDate = LocalDate.parse(billingDateString);
-        WeekIdentifier weekId = new WeekIdentifier(weekOfYear, year, billingDate);
-        String weeklyScheduleId = instructor.getSchedule().getWeeklyScheduleIdMap().get(weekId);
+	Account account = accountDao.get(accountId);
+	Instructor instructor = instructorDao.get(instructorId);
+	LocalDate billingDate = LocalDate.parse(billingDateString);
+	WeekIdentifier weekId = new WeekIdentifier(weekOfYear, year, billingDate);
+	String weeklyScheduleId = instructor.getSchedule().getWeeklyScheduleIdMap().get(weekId);
 
-        WeeklyScheduleDao weeklyScheduleDao = new WeeklyScheduleDao();
-        WeeklySchedule weeklySchedule = weeklyScheduleDao.get(weeklyScheduleId);
+	WeeklyScheduleDao weeklyScheduleDao = new WeeklyScheduleDao();
+	WeeklySchedule weeklySchedule = weeklyScheduleDao.get(weeklyScheduleId);
 
-        Lesson lesson = weeklySchedule.findLesson(lessonId);
-        LocalDate date = LocalDate.parse(dateString);
+	Lesson lesson = weeklySchedule.findLesson(lessonId);
+	LocalDate date = LocalDate.parse(dateString);
 
-        account.applyLessonCost(date, lesson, instructor);
-        accountDao.update(account);
+	account.applyLessonCost(date, lesson, instructor);
+	accountDao.update(account);
 
-        return Response.ok("Applying lesson cost was successful!").build();
+	return Response.ok("Applying lesson cost was successful!").build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Path("createLessonLink")
     public Response createLessonLink(@FormParam("accountId") String accountId,
-            @FormParam("primaryLessonId") String primaryLessonId,
-            @FormParam("lessonId") Set<String> lessonIds)
+	    @FormParam("primaryLessonId") String primaryLessonId,
+	    @FormParam("lessonId") Set<String> lessonIds)
     {
-        Account account = accountDao.get(accountId);
+	Account account = accountDao.get(accountId);
 
-        LessonLinkBuilder builder = new LessonLink.LessonLinkBuilder(primaryLessonId);
-        builder.withAdditionalLessons(lessonIds);
+	LessonLinkBuilder builder = new LessonLink.LessonLinkBuilder(primaryLessonId);
+	builder.withAdditionalLessons(lessonIds);
 
-        LessonLink lessonLink = builder.build();
+	LessonLink lessonLink = builder.build();
 
-        account.setLessonLink(lessonLink);
-        accountDao.update(account);
-        
-        return Response.ok().build();
+	account.setLessonLink(lessonLink);
+	accountDao.update(account);
+
+	return Response.ok().build();
     }
 }

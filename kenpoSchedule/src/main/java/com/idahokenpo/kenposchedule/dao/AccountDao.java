@@ -84,5 +84,10 @@ public class AccountDao extends AbstractDao<Account>
         collection.insertOne(Document.parse(json));
     }
     
+    public void delete(String id)
+    {
+	collection.deleteOne(eq(CollectionNamesHelper.ACCOUNTS.getKeyId(), id));
+    }
+    
     
 }
